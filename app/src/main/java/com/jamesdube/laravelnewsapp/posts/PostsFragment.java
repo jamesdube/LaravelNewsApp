@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,9 @@ import com.jamesdube.laravelnewsapp.App;
 import com.jamesdube.laravelnewsapp.R;
 import com.jamesdube.laravelnewsapp.adapters.PostAdapter;
 import com.jamesdube.laravelnewsapp.http.Client;
+import com.jamesdube.laravelnewsapp.models.Post;
+
+import java.util.List;
 
 public class PostsFragment extends Fragment {
 
@@ -43,7 +47,6 @@ public class PostsFragment extends Fragment {
 
     private void boot() {
         postsRecyclerview = (RecyclerView) getActivity().findViewById(R.id.postsRecyclerview);
-        postsRecyclerview = new RecyclerView(App.getAppContext());
         postsRecyclerview.setLayoutManager(new LinearLayoutManager(App.getAppContext()));
     }
 
@@ -51,8 +54,8 @@ public class PostsFragment extends Fragment {
 
         Client.getPosts(new Client.requestCallback() {
             @Override
-            public void onSuccess() {
-                setupPosts();
+            public void onSuccess(List<Post> posts) {
+                setupPosts(posts);
             }
 
             @Override
@@ -62,7 +65,8 @@ public class PostsFragment extends Fragment {
         });
     }
 
-    private void setupPosts(){
+    private void setupPosts(List<Post> posts){
+        postAdapter = new PostAdapter(posts);
         postsRecyclerview.setAdapter(postAdapter);
     }
 }

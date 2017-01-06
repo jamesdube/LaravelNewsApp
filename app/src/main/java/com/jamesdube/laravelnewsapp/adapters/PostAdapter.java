@@ -1,6 +1,7 @@
 package com.jamesdube.laravelnewsapp.adapters;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,7 +44,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
 
     @Override
     public int getItemCount() {
-        return 0;
+        return posts.size();
     }
 
      class PostViewHolder extends RecyclerView.ViewHolder{
@@ -53,6 +54,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
 
         PostViewHolder(View itemView) {
             super(itemView);
+
+            title = (TextView) itemView.findViewById(R.id.postTitle);
+            subTitle = (TextView) itemView.findViewById(R.id.postSubtitle);
+            coverImage = (ImageView) itemView.findViewById(R.id.postCoverImage);
         }
     }
 }
