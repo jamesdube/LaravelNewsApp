@@ -10,7 +10,7 @@ import android.util.Log;
 
 public class App extends Application {
     private static App Instance;
-    public static String Tag = "REALM";
+    public static String Tag = "LaravelNewsApp";
 
     @Override
     public void onCreate() {
