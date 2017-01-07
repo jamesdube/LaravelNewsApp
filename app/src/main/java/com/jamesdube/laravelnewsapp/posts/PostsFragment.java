@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +13,10 @@ import com.jamesdube.laravelnewsapp.App;
 import com.jamesdube.laravelnewsapp.R;
 import com.jamesdube.laravelnewsapp.adapters.PostAdapter;
 import com.jamesdube.laravelnewsapp.http.Client;
+import com.jamesdube.laravelnewsapp.http.requests.onGetPosts;
+import com.jamesdube.laravelnewsapp.http.requests.rssRequest;
 import com.jamesdube.laravelnewsapp.models.Post;
+import com.jamesdube.laravelnewsapp.util.request;
 
 import java.util.List;
 
@@ -51,8 +53,7 @@ public class PostsFragment extends Fragment {
     }
 
     private void getPosts() {
-
-        Client.getPosts(new Client.requestCallback() {
+        Client.getPosts(new onGetPosts() {
             @Override
             public void onSuccess(List<Post> posts) {
                 setupPosts(posts);
