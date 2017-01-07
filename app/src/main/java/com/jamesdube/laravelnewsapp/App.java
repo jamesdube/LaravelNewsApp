@@ -4,12 +4,15 @@ import android.app.Application;
 import android.content.Context;
 import android.util.Log;
 
+import com.google.gson.Gson;
+
 /**
  * Created by rick on 1/6/17.
  */
 
 public class App extends Application {
     private static App Instance;
+    private static Gson gson;
     public static String Tag = "LaravelNewsApp";
 
     @Override
@@ -28,6 +31,14 @@ public class App extends Application {
 
     public static Context getAppContext() {
         return getInstance().getApplicationContext();
+    }
+
+    //Gson Singleton
+    public static Gson Gson(){
+        if(gson == null){
+            gson = new Gson();
+        }
+        return gson;
     }
 
 }
