@@ -1,8 +1,10 @@
 package com.jamesdube.laravelnewsapp.http;
 
+import com.jamesdube.laravelnewsapp.http.requests.onGetPosts;
+import com.jamesdube.laravelnewsapp.http.requests.rssRequest;
 import com.jamesdube.laravelnewsapp.models.Post;
+import com.jamesdube.laravelnewsapp.util.request;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,12 +13,8 @@ import java.util.List;
 
 public class Client {
 
-    public static List<Post> getPosts(requestCallback requestCallback){
-        return new ArrayList<>();
+    public static void getPosts(onGetPosts callback){
+        rssRequest.requestPosts(callback);
     }
 
-    public interface requestCallback{
-        void onSuccess();
-        void onFailure();
-    }
 }
