@@ -4,6 +4,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.NetworkImageView;
+import com.google.gson.Gson;
+import com.jamesdube.laravelnewsapp.App;
 
 /**
  * Created by rick on 1/6/17.
@@ -19,6 +21,13 @@ public class Post {
 
     //Post Cover Image
     private String coverImage;
+
+    //The URL link
+    private String link;
+
+    //The Author of the Post
+    private String creator;
+
 
     /**
      * Post constructor
@@ -54,5 +63,29 @@ public class Post {
 
     public void setCoverImage(String coverImage) {
         this.coverImage = coverImage;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
+    }
+
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator;
+    }
+
+    public String toJson() {
+        return App.Gson().toJson(this);
+    }
+
+    public static Post fromJson(String json) {
+        return App.Gson().fromJson(json, Post.class);
     }
 }
