@@ -37,7 +37,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         holder.title.setText(posts.get(position).getTitle());
         holder.subTitle.setText(posts.get(position).getSubTitle());
         //holder.coverImage.setImageUrl(posts.get(position).getCoverImage(),new ImageLoader());
-        Glide.with(App.getAppContext()).load(posts.get(position).getCoverImage())
+        Glide.with(App.getAppContext()).load(R.drawable.article1)
                 .into(holder.coverImage);
 
     }
