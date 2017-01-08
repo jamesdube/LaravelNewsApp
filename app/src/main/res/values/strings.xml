@@ -6,4 +6,5 @@
 
     <string name="action_settings">Settings</string>
     <string name="title_activity_post">PostActivity</string>
+    <string name="large_text">large text</string>
 </resources>

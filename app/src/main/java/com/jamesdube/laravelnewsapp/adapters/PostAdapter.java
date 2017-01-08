@@ -17,6 +17,7 @@ import com.jamesdube.laravelnewsapp.R;
 import com.jamesdube.laravelnewsapp.models.Post;
 
 import java.util.List;
+import java.util.Random;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder> {
     List<Post> posts;
@@ -37,9 +38,42 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         holder.title.setText(posts.get(position).getTitle());
         holder.subTitle.setText(posts.get(position).getSubTitle());
         //holder.coverImage.setImageUrl(posts.get(position).getCoverImage(),new ImageLoader());
-        Glide.with(App.getAppContext()).load(R.drawable.article1)
+        Glide.with(App.getAppContext()).load(getRandomImage())
                 .into(holder.coverImage);
 
+    }
+
+    public int getRandomImage(){
+        Random rand = new Random();
+        switch (rand.nextInt(8)){
+            case 1 : {
+                return R.drawable.article1;
+            }
+            case 2 : {
+                return R.drawable.article2;
+            }
+            case 3 : {
+                return R.drawable.article3;
+            }
+            case 4 : {
+                return R.drawable.article4;
+            }
+            case 5 : {
+                return R.drawable.article5;
+            }
+            case 6 : {
+                return R.drawable.article6;
+            }
+            case 7 : {
+                return R.drawable.article7;
+            }
+            case 8 : {
+                return R.drawable.article8;
+            }
+            default:{
+                return R.drawable.article1;
+            }
+        }
     }
 
     @Override
