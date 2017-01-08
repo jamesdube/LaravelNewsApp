@@ -5,6 +5,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.jamesdube.laravelnewsapp.util.Themes;
 
 /**
  * Created by rick on 1/6/17.
