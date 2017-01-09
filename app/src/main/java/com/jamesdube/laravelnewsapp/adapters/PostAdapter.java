@@ -1,5 +1,6 @@
 package com.jamesdube.laravelnewsapp.adapters;
 
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jamesdube.laravelnewsapp.App;
 import com.jamesdube.laravelnewsapp.R;
 import com.jamesdube.laravelnewsapp.models.Post;
+import com.jamesdube.laravelnewsapp.posts.PostActivity;
 
 import java.util.List;
 import java.util.Random;
@@ -40,10 +42,17 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         //holder.coverImage.setImageUrl(posts.get(position).getCoverImage(),new ImageLoader());
         Glide.with(App.getAppContext()).load(getRandomImage())
                 .into(holder.coverImage);
+        holder.coverImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                App.getAppContext()
+                        .startActivity(new Intent(App.getAppContext(), PostActivity.class));
+            }
+        });
 
     }
 
-    public int getRandomImage(){
+    public static int getRandomImage(){
         Random rand = new Random();
         switch (rand.nextInt(8)){
             case 1 : {

@@ -42,9 +42,10 @@
             app:expandedTitleMarginEnd="64dp">
 
             <ImageView
+                android:background="@drawable/article3"
                 android:id="@+id/backdrop"
+                android:layout_height="200dp"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
                 android:scaleType="centerCrop"
                 android:fitsSystemWindows="true"
                 app:layout_collapseMode="parallax" />
@@ -101,11 +102,10 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <include layout="@layout/content_post"/>
-        <!--<WebView
+        <WebView
             android:id="@+id/webView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>-->
+            android:layout_height="wrap_content"/>
 
     </android.support.v4.widget.NestedScrollView>
 
