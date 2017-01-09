@@ -33,6 +33,7 @@
         <item name="android:textColorPrimaryInverse">@color/textColorPrimaryInverse_dark</item>
         <item name="android:textColorSecondaryInverse">@color/textColorSecondaryInverse_dark</item>
         <!-- some other theme configurations for actionbar, overflow menu etc. -->
+        <item name="ts">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
     </style>
 
     <style name="AppTheme.Dark.NoActionBar">
