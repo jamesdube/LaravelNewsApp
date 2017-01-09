@@ -33,6 +33,7 @@
         <item name="android:textColorPrimaryInverse">@color/textColorPrimaryInverse_dark</item>
         <item name="android:textColorSecondaryInverse">@color/textColorSecondaryInverse_dark</item>
         <!-- some other theme configurations for actionbar, overflow menu etc. -->
+        <item name="ts">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
     </style>
 
     <style name="AppTheme.Dark.NoActionBar">
@@ -42,7 +43,7 @@
 
     <style name="AppTheme.Dark.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="AppTheme.Dark.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="AppTheme.Dark.PopupOverlay" parent="ThemeOverlay.AppCompat.Dark" />
 
     <!--cards-->
     <style name="Widget.CardContent" parent="android:Widget">
