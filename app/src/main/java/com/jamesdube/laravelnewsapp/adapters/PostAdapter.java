@@ -36,7 +36,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     }
 
     @Override
-    public void onBindViewHolder(PostViewHolder holder, int position) {
+    public void onBindViewHolder(PostViewHolder holder, final int position) {
         holder.title.setText(posts.get(position).getTitle());
         holder.subTitle.setText(posts.get(position).getSubTitle());
         //holder.coverImage.setImageUrl(posts.get(position).getCoverImage(),new ImageLoader());
@@ -45,8 +45,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         holder.coverImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                App.getAppContext()
-                        .startActivity(new Intent(App.getAppContext(), PostActivity.class));
+                Intent postIntent = new Intent(App.getAppContext(), PostActivity.class);
+                postIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                App.getAppContext().startActivity(postIntent);
             }
         });
 
