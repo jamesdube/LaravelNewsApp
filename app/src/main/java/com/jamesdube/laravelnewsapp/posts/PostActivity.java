@@ -56,8 +56,10 @@ public class PostActivity extends AppCompatActivity {
                 .load(post.getCoverImage())
                 .into(postImage);
 
+        String html = prepHtml(post);
+
         //load the content
-        webView.loadData(prepHtml(post), "text/html", "UTF-8");
+        webView.loadDataWithBaseURL("file:///android_asset/", html, "text/html", "utf-8", null);
 
     }
 
@@ -101,9 +103,10 @@ public class PostActivity extends AppCompatActivity {
     }
 
     private String prepHtml(Post post){
-        String html = post.getDescription().replaceFirst("<img([^<]*)>", "");
-        Log.d(App.Tag,html);
-        return html;
+        return "<HTML><HEAD><link href=\"style.css\" type=\"text/css\" rel=\"stylesheet\"/></HEAD><body>" +
+                "<div class=\"container-fluid\"><div class=\"row\"> <div class=\"col-lg-12\">" +
+                post.getDescription().replaceFirst("<img([^<]*)>", "") +
+                " </div></div></div></body></HTML>";
     }
 
     private void boot(){
