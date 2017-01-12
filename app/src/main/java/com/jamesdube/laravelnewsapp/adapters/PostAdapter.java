@@ -1,6 +1,7 @@
 package com.jamesdube.laravelnewsapp.adapters;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,6 +21,8 @@ import com.jamesdube.laravelnewsapp.posts.PostActivity;
 
 import java.util.List;
 import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder> {
     List<Post> posts;
@@ -36,17 +39,20 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     }
 
     @Override
-    public void onBindViewHolder(PostViewHolder holder, final int position) {
+    public void onBindViewHolder(final PostViewHolder holder, final int position) {
+
+        posts.get(position).extractImageUrl();
         holder.title.setText(posts.get(position).getTitle());
         holder.subTitle.setText(posts.get(position).getSubTitle());
         //holder.coverImage.setImageUrl(posts.get(position).getCoverImage(),new ImageLoader());
-        Glide.with(App.getAppContext()).load(getRandomImage())
+        Glide.with(App.getAppContext()).load(posts.get(position).getCoverImage())
                 .into(holder.coverImage);
         holder.coverImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent postIntent = new Intent(App.getAppContext(), PostActivity.class);
                 postIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                postIntent.putExtra("POST",posts.get(position).toJson());
                 App.getAppContext().startActivity(postIntent);
             }
         });
