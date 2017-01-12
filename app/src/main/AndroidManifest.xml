@@ -34,6 +34,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.jamesdube.laravelnewsapp.MainActivity" />
         </activity>
+        <activity
+            android:name="com.github.bkhezry.extrawebview.ItemActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
