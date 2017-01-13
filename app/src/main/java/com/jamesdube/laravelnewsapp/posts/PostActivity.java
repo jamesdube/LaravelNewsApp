@@ -53,7 +53,7 @@ public class PostActivity extends AppCompatActivity {
 
         //set the Image
         Glide.with(App.getAppContext())
-                .load(post.getCoverImage())
+                .load(PostAdapter.getRandomImage())
                 .into(postImage);
 
         String html = prepHtml(post);
@@ -112,8 +112,11 @@ public class PostActivity extends AppCompatActivity {
     private void boot(){
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        assert getSupportActionBar() != null;
-         getSupportActionBar().setHomeButtonEnabled(true);
+        if( getSupportActionBar() != null){
+            getSupportActionBar().setHomeButtonEnabled(true);
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
+
         postTitle = (TextView) findViewById(R.id.postTitle);
         pubDate = (TextView) findViewById(R.id.pubDate);
         postImage = (ImageView) findViewById(R.id.backdrop);

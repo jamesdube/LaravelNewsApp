@@ -73,7 +73,7 @@ public class rssRequest {
         RequestQueue queue = Volley.newRequestQueue(App.getAppContext());
         StringRequest stringRequest = new StringRequest(
                 Request.Method.GET,
-                request.URL.LARAVEL_FEED_URL_LIVE,
+                request.URL.LARAVEL_FEED_URL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

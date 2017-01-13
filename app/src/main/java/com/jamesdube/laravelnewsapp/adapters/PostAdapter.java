@@ -43,9 +43,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
 
         posts.get(position).extractImageUrl();
         holder.title.setText(posts.get(position).getTitle());
-        holder.subTitle.setText(posts.get(position).getSubTitle());
+        //holder.subTitle.setText(posts.get(position).getSubTitle());
         //holder.coverImage.setImageUrl(posts.get(position).getCoverImage(),new ImageLoader());
-        Glide.with(App.getAppContext()).load(posts.get(position).getCoverImage())
+        Glide.with(App.getAppContext()).load(getRandomImage())
                 .into(holder.coverImage);
         holder.coverImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,7 +106,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             super(itemView);
 
             title = (TextView) itemView.findViewById(R.id.postTitle);
-            subTitle = (TextView) itemView.findViewById(R.id.postSubtitle);
+            //subTitle = (TextView) itemView.findViewById(R.id.postSubtitle);
             coverImage = (ImageView) itemView.findViewById(R.id.postCoverImage);
         }
     }

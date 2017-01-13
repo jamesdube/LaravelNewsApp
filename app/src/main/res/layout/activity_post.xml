@@ -42,7 +42,6 @@
             app:expandedTitleMarginEnd="64dp">
 
             <ImageView
-                android:background="@drawable/article3"
                 android:id="@+id/backdrop"
                 android:layout_height="200dp"
                 android:layout_width="match_parent"
@@ -63,7 +62,7 @@
             <android.support.v7.widget.Toolbar
                 android:layout_width="match_parent"
                 android:background="?attr/colorPrimary"
-                android:title=""
+                android:title=" "
                 android:theme="?ts"
                 android:layout_height="56dp"
                 android:id="@+id/toolbar"
