@@ -12,10 +12,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <ImageView
-                style="@style/Widget.CardImage"
                 android:id="@+id/postCoverImage"
-                android:layout_width="match_parent"
-                android:layout_height="166dp" />
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter" />
             <LinearLayout
                 android:padding="15dp"
                 style="@style/Widget.CardContent"

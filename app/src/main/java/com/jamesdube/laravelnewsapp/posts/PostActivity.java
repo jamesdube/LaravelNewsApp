@@ -53,7 +53,7 @@ public class PostActivity extends AppCompatActivity {
 
         //set the Image
         Glide.with(App.getAppContext())
-                .load(PostAdapter.getRandomImage())
+                .load(post.getCoverImage())
                 .into(postImage);
 
         String html = prepHtml(post);
