@@ -53,44 +53,13 @@ public class PostActivity extends AppCompatActivity {
 
         //set the Image
         Glide.with(App.getAppContext())
-                .load(post.getCoverImage())
+                .load(PostAdapter.getRandomImage())
                 .into(postImage);
 
         String html = prepHtml(post);
 
         //load the content
         webView.loadDataWithBaseURL("file:///android_asset/", html, "text/html", "utf-8", null);
-
-    }
-
-    private void loadWebView(Post post){
-        try{
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            Date parsedDate = dateFormat.parse(post.getPubDate());
-            DataModel dataModel = new DataModelBuilder()
-                    .withType("blog")
-                    .withBy("authorName")
-                    .withTime(parsedDate.getTime())
-                    .withUrl(post.getLink())
-                    .withDescription(post.getTitle())
-                    .withBookmark(true)
-                    .withViewed(true)
-                    .withRank(0)
-                    .withVoted(true)
-                    .withPageTitle(post.getTitle())
-                    .build();
-            new ExtraWebViewCreator()
-                    .withContext(this)
-                    .withBookmarkIcon(true)
-                    .withVoteIcon(true)
-                    //.withCustomFont("fonts/IRANSansMobile.ttf")
-                    //.withThemeName(themeName)
-                    .withDataModel(dataModel)
-                    .show();
-        }catch(Exception e){//this generic but you can control another types of exception
-
-        }
-
 
     }
 
@@ -113,7 +82,7 @@ public class PostActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if( getSupportActionBar() != null){
-            getSupportActionBar().setHomeButtonEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
 
@@ -126,7 +95,7 @@ public class PostActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_post, menu);
+        getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
