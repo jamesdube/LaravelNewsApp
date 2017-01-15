@@ -67,7 +67,7 @@ public class PostsFragment extends Fragment {
     }
 
     private void setupPosts(List<Post> posts){
-        postAdapter = new PostAdapter(posts);
+        postAdapter = new PostAdapter(getContext(),posts);
         postsRecyclerview.setAdapter(postAdapter);
     }
 }

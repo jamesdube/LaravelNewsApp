@@ -1,5 +1,6 @@
 package com.jamesdube.laravelnewsapp.adapters;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -27,9 +28,9 @@ import java.util.regex.Pattern;
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder> {
     List<Post> posts;
     private LayoutInflater inflator;
-    public PostAdapter(List<Post> posts) {
+    public PostAdapter(Context context,List<Post> posts) {
         this.posts = posts;
-        inflator = LayoutInflater.from(App.getAppContext());
+        inflator = LayoutInflater.from(context);
     }
 
     @Override
@@ -45,7 +46,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         holder.title.setText(posts.get(position).getTitle());
         //holder.subTitle.setText(posts.get(position).getSubTitle());
         //holder.coverImage.setImageUrl(posts.get(position).getCoverImage(),new ImageLoader());
-        Glide.with(App.getAppContext()).load(posts.get(position).getCoverImage())
+        Glide.with(App.getAppContext()).load(getRandomImage())
                 .into(holder.coverImage);
         holder.coverImage.setOnClickListener(new View.OnClickListener() {
             @Override
