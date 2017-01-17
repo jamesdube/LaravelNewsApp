@@ -20,6 +20,7 @@ import android.widget.LinearLayout;
 import com.jamesdube.laravelnewsapp.adapters.PostAdapter;
 import com.jamesdube.laravelnewsapp.http.Client;
 import com.jamesdube.laravelnewsapp.posts.PostsFragment;
+import com.jamesdube.laravelnewsapp.sync.SyncAdapterManager;
 import com.jamesdube.laravelnewsapp.util.Themes;
 
 import java.util.List;
@@ -34,6 +35,8 @@ public class MainActivity extends AppCompatActivity
         Themes.applyTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //create account first
+        SyncAdapterManager.init(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -102,7 +105,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_archive) {
 
         } else if (id == R.id.nav_share) {
-
+            SyncAdapterManager.forceRefresh();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

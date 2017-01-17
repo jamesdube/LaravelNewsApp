@@ -14,9 +14,7 @@ import com.jamesdube.laravelnewsapp.R;
 import com.jamesdube.laravelnewsapp.adapters.PostAdapter;
 import com.jamesdube.laravelnewsapp.http.Client;
 import com.jamesdube.laravelnewsapp.http.requests.onGetPosts;
-import com.jamesdube.laravelnewsapp.http.requests.rssRequest;
 import com.jamesdube.laravelnewsapp.models.Post;
-import com.jamesdube.laravelnewsapp.util.request;
 
 import java.util.List;
 
