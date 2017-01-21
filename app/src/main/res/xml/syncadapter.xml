@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <sync-adapter
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:allowParallelSyncs="true"
+    android:allowParallelSyncs="false"
     android:isAlwaysSyncable="true"
-    android:supportsUploading="true"
+    android:supportsUploading="false"
     android:userVisible="true"
     android:contentAuthority="com.jamesdube.laravelnewsapp.provider"
     android:accountType="com.jamesdube.laravelnewsapp"/>

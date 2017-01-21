@@ -21,11 +21,7 @@ public class SyncService extends Service {
      */
     @Override
     public void onCreate() {
-        /*
-         * Create the sync adapter as a singleton.
-         * Set the sync adapter as syncable
-         * Disallow parallel syncs
-         */
+        System.out.println("xxxx oncreate LNAsyncservice...");
         synchronized (sSyncAdapterLock) {
             if (sSyncAdapter == null) {
                 sSyncAdapter = new SyncAdapter(getApplicationContext(), true);
@@ -39,12 +35,7 @@ public class SyncService extends Service {
      */
     @Override
     public IBinder onBind(Intent intent) {
-        /*
-         * Get the object that allows external processes
-         * to call onPerformSync(). The object is created
-         * in the base class code when the SyncAdapter
-         * constructors call super()
-         */
+        System.out.println("xxxx onbind service....");
         return sSyncAdapter.getSyncAdapterBinder();
     }
 }

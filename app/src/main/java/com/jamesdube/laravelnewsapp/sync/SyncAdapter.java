@@ -1,22 +1,23 @@
 package com.jamesdube.laravelnewsapp.sync;
 
 import android.accounts.Account;
-import android.app.Notification;
-import android.app.NotificationManager;
+import android.accounts.AccountManager;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.SyncRequest;
 import android.content.SyncResult;
-import android.media.RingtoneManager;
-import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.NotificationManagerCompat;
-import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
-import com.jamesdube.laravelnewsapp.App;
 import com.jamesdube.laravelnewsapp.R;
+import com.jamesdube.laravelnewsapp.models.Post;
+import com.jamesdube.laravelnewsapp.util.NotificationManager;
+
+import java.util.List;
+
 
 /**
  * Created by rick on 1/15/17.
@@ -25,65 +26,109 @@ import com.jamesdube.laravelnewsapp.R;
  * app, using the Android sync adapter framework.
  */
 public class SyncAdapter extends AbstractThreadedSyncAdapter {
-    // Global variables
-    // Define a variable to contain a content resolver instance
-    ContentResolver mContentResolver;
+    //Refresh every 5 seconds
+    public static final int SYNC_INTERVAL = 5;
+    public static final int SYNC_FLEXTIME = SYNC_INTERVAL/3;
+    public static final String AUTHORITY    = "com.jamesdube.laravelnewsapp.provider";
+    public static final String ACCOUNT_TYPE = "com.jamesdube.laravelnewsapp";
+    public static final String ACCOUNT      = "Laravel Artisan";
 
-    /**
-     * Set up the sync adapter
-     */
+
     public SyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
-        /*
-         * If your app uses a content resolver, get an instance of it
-         * from the incoming Context
-         */
-        mContentResolver = context.getContentResolver();
+        System.out.println("xxxx constructor syncadapter....");
     }
 
-    /**
-     * Set up the sync adapter. This form of the
-     * constructor maintains compatibility with Android 3.0
-     * and later platform versions
-     */
-    public SyncAdapter(
-            Context context,
-            boolean autoInitialize,
-            boolean allowParallelSyncs) {
-        super(context, autoInitialize, allowParallelSyncs);
-        /*
-         * If your app uses a content resolver, get an instance of it
-         * from the incoming Context
-         */
-        mContentResolver = context.getContentResolver();
-    }
-
-    /**
-     * Perform a sync for this account. SyncAdapter-specific parameters may
-     * be specified in extras, which is guaranteed to not be null. Invocations
-     * of this method are guaranteed to be serialized.
-     *
-     * @param account    the account that should be synced
-     * @param extras     SyncAdapter-specific parameters
-     * @param authority  the authority of this sync request
-     * @param provider   a ContentProviderClient that points to the ContentProvider for this
-     *                   authority
-     * @param syncResult SyncAdapter-specific parameters
-     */
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
-        Log.d(App.Tag,"Hit->onPerformSync");
-        Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(App.getAppContext());
-        builder.setSmallIcon(R.mipmap.ic_launcher)
-                .setSound(soundUri)
-                .setAutoCancel(true)
-                .setContentTitle("Laravel Artisan")
-                .setContentText("sync..");
+        System.out.println("xxxx onPerformSync...");
+        NotificationManager.newPostNotification("sync...");
 
-        Notification notification = builder.build();
-        NotificationManagerCompat.from(App.getAppContext()).notify(0,notification);
-        NotificationManager manager = (NotificationManager) App.getInstance().getSystemService(Context.NOTIFICATION_SERVICE);
-        manager.notify(0,builder.build());
+    }
+
+    private void saveData(List<Post> posts){
+        System.out.println("xxxx inserted success. "+ String.valueOf(posts.size())+" inserted");
+    }
+
+    /**
+     * Helper method to schedule the sync adapter periodic execution
+     */
+    public static void configurePeriodicSync(Context context, int syncInterval, int flexTime) {
+        Account account = getSyncAccount(context);
+        String authority = AUTHORITY;
+/*        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            // we can enable inexact timers in our periodic sync
+            SyncRequest request = new SyncRequest.Builder().
+                    syncPeriodic(syncInterval, flexTime).
+                    setSyncAdapter(account, authority).
+                    setExtras(new Bundle()).build();
+            ContentResolver.requestSync(request);
+        } else {
+            ContentResolver.addPeriodicSync(account,
+                    authority, new Bundle(), syncInterval);
+        }*/
+        ContentResolver.addPeriodicSync(account,authority,new Bundle(),90);
+    }
+
+    public static Account getSyncAccount(Context context) {
+        // Get an instance of the Android account manager
+        AccountManager accountManager =
+                (AccountManager) context.getSystemService(Context.ACCOUNT_SERVICE);
+
+        // Create the account type and default account
+        Account newAccount = new Account(
+                context.getString(R.string.app_name),ACCOUNT_TYPE);
+
+        // If the password doesn't exist, the account doesn't exist
+        if ( null == accountManager.getPassword(newAccount) ) {
+
+        /*
+         * Add the account and account type, no password or user data
+         * If successful, return the Account object, otherwise report an error.
+         */
+            if (!accountManager.addAccountExplicitly(newAccount, "", null)) {
+                return null;
+            }
+            /*
+             * If you don't set android:syncable="true" in
+             * in your <provider> element in the manifest,
+             * then call ContentResolver.setIsSyncable(account, AUTHORITY, 1)
+             * here.
+             */
+            onAccountCreated(newAccount, context);
+        }
+        return newAccount;
+    }
+
+    private static void onAccountCreated(Account newAccount, Context context) {
+        /*
+         * Since we've created an account
+         */
+        configurePeriodicSync(context, SYNC_INTERVAL, SYNC_FLEXTIME);
+
+        /*
+         * Without calling setSyncAutomatically, our periodic sync will not be enabled.
+         */
+        ContentResolver.setSyncAutomatically(newAccount, AUTHORITY, true);
+
+        /*
+         * Finally, let's do a sync to get things started
+         */
+        syncImmediately(context);
+    }
+
+    public static void syncImmediately(Context context) {
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+        bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+        ContentResolver.requestSync(getSyncAccount(context),
+                AUTHORITY, bundle);
+        Log.d("LNA", "syncImmediately: ");
+        System.out.println("xxxx syncImmediately");
+    }
+
+    public static void initializeSyncAdapter(Context context) {
+        System.out.println("xxxx initialize syncadapter....");
+        getSyncAccount(context);
     }
 }
