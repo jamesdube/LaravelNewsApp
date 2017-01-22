@@ -14,8 +14,8 @@ import android.view.ViewGroup;
 import com.jamesdube.laravelnewsapp.App;
 import com.jamesdube.laravelnewsapp.R;
 import com.jamesdube.laravelnewsapp.adapters.PostAdapter;
-import com.jamesdube.laravelnewsapp.http.FeedManager;
 import com.jamesdube.laravelnewsapp.models.Post;
+import com.jamesdube.laravelnewsapp.models.PostRepository;
 import com.jamesdube.laravelnewsapp.sync.SyncAdapter;
 
 import java.util.List;
@@ -73,13 +73,13 @@ public class PostsFragment extends Fragment {
     }
 
     private void getPosts() {
-        posts = FeedManager.getUnreadPosts();
+        posts = PostRepository.getUnreadPosts();
 
     }
 
     private void setupPosts(){
         //setup
-        posts = FeedManager.getUnreadPosts();
+        posts = PostRepository.getUnreadPosts();
         ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT){
 
             @Override

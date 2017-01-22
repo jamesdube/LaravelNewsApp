@@ -6,17 +6,21 @@ import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.SyncRequest;
 import android.content.SyncResult;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.jamesdube.laravelnewsapp.App;
 import com.jamesdube.laravelnewsapp.R;
+import com.jamesdube.laravelnewsapp.http.Client;
+import com.jamesdube.laravelnewsapp.http.requests.onGetPosts;
 import com.jamesdube.laravelnewsapp.models.Post;
-import com.jamesdube.laravelnewsapp.util.NotificationManager;
+import com.jamesdube.laravelnewsapp.models.PostRepository;
+import com.jamesdube.laravelnewsapp.util.Notify;
 
 import java.util.List;
+
+import io.realm.Realm;
 
 
 /**
@@ -42,12 +46,37 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
         System.out.println("xxxx onPerformSync...");
-        NotificationManager.newPostNotification("sync...");
+        //fetch posts
+        Client.getPosts(new onGetPosts() {
+            @Override
+            public void onSuccess(List<Post> posts) {
+                System.out.println("xxxx found (" + String.valueOf(posts.size()) + ") posts...");
+                //filter existing posts
+                List<Post> newPosts = PostRepository.filterNewPosts(posts);
+                System.out.println("xxxx got (" + String.valueOf(newPosts.size()) + ") posts after filtering...");
+                for (Post filteredPost : newPosts) {
+                    System.out.println("xxxx newPost : " + filteredPost.getTitle());
+                }
+                //save new posts
+                if(newPosts.size() > 0){
+                    PostRepository.savePosts(newPosts);
+                }
 
-    }
 
-    private void saveData(List<Post> posts){
-        System.out.println("xxxx inserted success. "+ String.valueOf(posts.size())+" inserted");
+
+
+
+            }
+
+            @Override
+            public void onFailure() {
+                System.out.println("xxxx failed to get posts...");
+            }
+        });
+        //filter existing posts
+        //save new posts
+        //send new posts notification
+
     }
 
     /**
