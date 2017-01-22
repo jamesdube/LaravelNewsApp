@@ -6,6 +6,7 @@ import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SyncResult;
 import android.os.Bundle;
 import android.util.Log;
@@ -36,6 +37,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     public static final String AUTHORITY    = "com.jamesdube.laravelnewsapp.provider";
     public static final String ACCOUNT_TYPE = "com.jamesdube.laravelnewsapp";
     public static final String ACCOUNT      = "Laravel Artisan";
+    public static final String SYNC_FINISHED      = "com.jamesdube.DYNC";
 
 
     public SyncAdapter(Context context, boolean autoInitialize) {
@@ -61,11 +63,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 if(newPosts.size() > 0){
                     PostRepository.savePosts(newPosts);
                 }
-
-
-
-
-
+                //Broadcast the sync result
+                Intent i = new Intent(SYNC_FINISHED);
+                sendBroadcast(i);
             }
 
             @Override
@@ -77,6 +77,10 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         //save new posts
         //send new posts notification
 
+    }
+
+    private void sendBroadcast(Intent i) {
+        App.getAppContext().sendBroadcast(i);
     }
 
     /**

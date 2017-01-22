@@ -1,5 +1,8 @@
 package com.jamesdube.laravelnewsapp.posts;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -23,6 +26,7 @@ import com.jamesdube.laravelnewsapp.R;
 import com.jamesdube.laravelnewsapp.SettingsActivity;
 import com.jamesdube.laravelnewsapp.adapters.PostAdapter;
 import com.jamesdube.laravelnewsapp.models.Post;
+import com.jamesdube.laravelnewsapp.sync.SyncAdapter;
 import com.jamesdube.laravelnewsapp.util.Themes;
 
 import java.sql.Timestamp;

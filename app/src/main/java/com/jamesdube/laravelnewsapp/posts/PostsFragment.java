@@ -1,5 +1,9 @@
 package com.jamesdube.laravelnewsapp.posts;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -7,6 +11,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,21 +66,26 @@ public class PostsFragment extends Fragment {
             public void onRefresh() {
                 //get posts
                 SyncAdapter.syncImmediately(getActivity());
-                try {
-                    Thread.sleep(5000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                swipeRefreshLayout.setRefreshing(false);
             }
         });
+        getActivity().registerReceiver(syncFinishedReceiver,new IntentFilter(SyncAdapter.SYNC_FINISHED));
 
     }
 
-    private void getPosts() {
-        posts = PostRepository.getUnreadPosts();
 
-    }
+        private BroadcastReceiver syncFinishedReceiver = new BroadcastReceiver() {
+
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Log.d("xxxx ", "Sync finished, should refresh nao!!");
+                swipeRefreshLayout.setRefreshing(false);
+                //repopulate
+                postAdapter.clear();
+                postAdapter.addAll(PostRepository.getUnreadPosts());
+                postAdapter.notifyDataSetChanged();
+
+            }
+        };
 
     private void setupPosts(){
         //setup
@@ -115,4 +125,6 @@ public class PostsFragment extends Fragment {
         postAdapter.notifyDataSetChanged();
 
     }
+
+
 }
