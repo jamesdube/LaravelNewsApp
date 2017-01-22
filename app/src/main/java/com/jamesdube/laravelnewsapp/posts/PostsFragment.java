@@ -3,6 +3,7 @@ package com.jamesdube.laravelnewsapp.posts;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -15,6 +16,7 @@ import com.jamesdube.laravelnewsapp.R;
 import com.jamesdube.laravelnewsapp.adapters.PostAdapter;
 import com.jamesdube.laravelnewsapp.http.FeedManager;
 import com.jamesdube.laravelnewsapp.models.Post;
+import com.jamesdube.laravelnewsapp.sync.SyncAdapter;
 
 import java.util.List;
 
@@ -25,6 +27,7 @@ public class PostsFragment extends Fragment {
     RecyclerView postsRecyclerview;
     PostAdapter postAdapter;
     List<Post> posts;
+    SwipeRefreshLayout swipeRefreshLayout;
 
    public static PostsFragment newInstance() {
 
@@ -51,6 +54,22 @@ public class PostsFragment extends Fragment {
     private void boot() {
         postsRecyclerview = (RecyclerView) getActivity().findViewById(R.id.postsRecyclerview);
         postsRecyclerview.setLayoutManager(new LinearLayoutManager(App.getAppContext()));
+        swipeRefreshLayout = (SwipeRefreshLayout) getActivity().findViewById(R.id.postsSwipeLayout);
+        //Implement onRefresh Action
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                //get posts
+                SyncAdapter.syncImmediately(getActivity());
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+
     }
 
     private void getPosts() {

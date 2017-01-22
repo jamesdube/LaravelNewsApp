@@ -112,4 +112,15 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             coverImage = (ImageView) itemView.findViewById(R.id.postCoverImage);
         }
     }
+    // Clean all elements of the recycler
+    public void clear() {
+        posts.clear();
+        notifyDataSetChanged();
+    }
+
+    // Add a list of items
+    public void addAll(List<Post> list) {
+        posts.addAll(list);
+        notifyDataSetChanged();
+    }
 }
