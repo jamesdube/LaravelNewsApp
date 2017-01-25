@@ -1,17 +1,14 @@
 package com.jamesdube.laravelnewsapp.models;
 
-import android.widget.ImageView;
-import android.widget.TextView;
-
-import com.android.volley.toolbox.NetworkImageView;
-import com.google.gson.Gson;
 import com.jamesdube.laravelnewsapp.App;
 
-/**
- * Created by rick on 1/6/17.
- */
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-public class Post {
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
+public class Post extends RealmObject{
 
     //Post Title
     private String title;
@@ -23,10 +20,22 @@ public class Post {
     private String coverImage;
 
     //The URL link
+    @PrimaryKey
     private String link;
 
     //The Author of the Post
     private String creator;
+
+    //The Description of the Post
+    private String description;
+
+    //The Published Date
+    private String pubDate;
+
+    //Article was read
+    private Boolean wasRead;
+
+
 
 
     /**
@@ -39,6 +48,9 @@ public class Post {
         this.title = title;
         this.subTitle = subTitle;
         this.coverImage = coverImage;
+    }
+
+    public Post() {
     }
 
     public String getTitle() {
@@ -82,10 +94,42 @@ public class Post {
     }
 
     public String toJson() {
-        return App.Gson().toJson(this);
+        return App.Gson().toJson(App.Realm().copyFromRealm(this));
     }
 
     public static Post fromJson(String json) {
         return App.Gson().fromJson(json, Post.class);
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getPubDate() {
+        return pubDate;
+    }
+
+    public void setPubDate(String pubDate) {
+        this.pubDate = pubDate;
+    }
+
+    public void extractImageUrl() {
+        Pattern pattern = Pattern.compile("<img src=\"(.*?)\">");
+        Matcher matcher = pattern.matcher(getDescription());
+        if(matcher.find()){
+            setCoverImage (matcher.group(1));
+        }
+    }
+
+    public Boolean getWasRead() {
+        return wasRead;
+    }
+
+    public void setWasRead(Boolean wasRead) {
+        this.wasRead = wasRead;
     }
 }

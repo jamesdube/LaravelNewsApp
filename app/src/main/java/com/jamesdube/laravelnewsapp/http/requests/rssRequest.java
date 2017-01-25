@@ -86,6 +86,7 @@ public class rssRequest {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.d(App.Tag,"error : "+VolleyErrorHelper.getMessage(error));
+                        callback.onFailure(error);
                     }
                 }
         );

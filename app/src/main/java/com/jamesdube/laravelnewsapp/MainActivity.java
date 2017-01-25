@@ -2,12 +2,8 @@ package com.jamesdube.laravelnewsapp;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -15,14 +11,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.LinearLayout;
 
-import com.jamesdube.laravelnewsapp.adapters.PostAdapter;
-import com.jamesdube.laravelnewsapp.http.Client;
 import com.jamesdube.laravelnewsapp.posts.PostsFragment;
+import com.jamesdube.laravelnewsapp.sync.SyncAdapter;
 import com.jamesdube.laravelnewsapp.util.Themes;
-
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -34,6 +26,9 @@ public class MainActivity extends AppCompatActivity
         Themes.applyTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //create account first
+        SyncAdapter.initializeSyncAdapter(this);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -102,7 +97,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_archive) {
 
         } else if (id == R.id.nav_share) {
-
+            SyncAdapter.syncImmediately(this);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

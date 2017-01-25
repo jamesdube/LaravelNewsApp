@@ -7,6 +7,9 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.jamesdube.laravelnewsapp.util.Themes;
 
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
+
 /**
  * Created by rick on 1/6/17.
  */
@@ -15,6 +18,7 @@ public class App extends Application {
     private static App Instance;
     private static Gson gson;
     public static String Tag = "LaravelNewsApp";
+    private static Realm realm;
 
     @Override
     public void onCreate() {
@@ -42,4 +46,18 @@ public class App extends Application {
         return gson;
     }
 
+    public static Realm Realm() {
+        if(realm == null){
+            // Create a RealmConfiguration that saves the Realm file in the app's "files" directory.
+            RealmConfiguration realmConfig = new RealmConfiguration.Builder(getInstance())
+                    .deleteRealmIfMigrationNeeded()
+                    .build();
+            Realm.setDefaultConfiguration(realmConfig);
+
+            // Get a Realm instance for this thread
+            realm = Realm.getDefaultInstance();
+        }
+
+        return realm;
+    }
 }
