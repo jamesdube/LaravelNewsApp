@@ -27,16 +27,15 @@ import java.util.regex.Pattern;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder> {
     List<Post> posts;
-    private LayoutInflater inflator;
-    public PostAdapter(Context context,List<Post> posts) {
+    public PostAdapter(List<Post> posts) {
         this.posts = posts;
-        inflator = LayoutInflater.from(context);
     }
 
     @Override
     public PostViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = inflator.inflate(R.layout.template_posts,parent,false);
-        return new PostViewHolder(view);
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.template_posts, parent, false);
+        return new PostViewHolder(itemView);
     }
 
     @Override
@@ -99,7 +98,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         return posts.size();
     }
 
-     public class PostViewHolder extends RecyclerView.ViewHolder{
+    public Post getPost(int position) {
+        return posts.get(position);
+    }
+
+    public class PostViewHolder extends RecyclerView.ViewHolder{
         TextView title;
         TextView subTitle;
         ImageView coverImage;

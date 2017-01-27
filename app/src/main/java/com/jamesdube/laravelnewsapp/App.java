@@ -8,10 +8,11 @@ import com.google.gson.Gson;
 import com.jamesdube.laravelnewsapp.util.Themes;
 
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
 import io.realm.RealmConfiguration;
 
 /**
- * Created by rick on 1/6/17.
+ * Created by james
  */
 
 public class App extends Application {
@@ -24,6 +25,7 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         Instance = this;
+        Realm();
     }
 
     public static App getInstance() {
@@ -49,13 +51,21 @@ public class App extends Application {
     public static Realm Realm() {
         if(realm == null){
             // Create a RealmConfiguration that saves the Realm file in the app's "files" directory.
-            RealmConfiguration realmConfig = new RealmConfiguration.Builder(getInstance())
+            Realm.init(getAppContext());
+            RealmConfiguration realmConfig = new RealmConfiguration.Builder()
                     .deleteRealmIfMigrationNeeded()
                     .build();
             Realm.setDefaultConfiguration(realmConfig);
 
             // Get a Realm instance for this thread
             realm = Realm.getDefaultInstance();
+
+            realm.addChangeListener(new RealmChangeListener<Realm>() {
+                @Override
+                public void onChange(Realm element) {
+                    Log.d(Tag,"app realmOnChangeListener");
+                }
+            });
         }
 
         return realm;

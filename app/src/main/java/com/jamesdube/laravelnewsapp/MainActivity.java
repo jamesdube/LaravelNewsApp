@@ -2,7 +2,9 @@ package com.jamesdube.laravelnewsapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -19,7 +21,7 @@ import com.jamesdube.laravelnewsapp.util.Themes;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-
+    static CoordinatorLayout coordinatorLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +47,12 @@ public class MainActivity extends AppCompatActivity
         fragmentManager.beginTransaction()
                 .replace(R.id.postsFragment, PostsFragment.newInstance())
                 .commit();
+        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.mainCoordinatorLayout);
     }
 
+    public static void showSnackBar(String message) {
+        Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_LONG).show();
+    }
 
 
     @Override

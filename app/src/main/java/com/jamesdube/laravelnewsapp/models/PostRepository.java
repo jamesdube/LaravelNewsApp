@@ -1,6 +1,10 @@
 package com.jamesdube.laravelnewsapp.models;
 
+import com.android.volley.VolleyError;
 import com.jamesdube.laravelnewsapp.App;
+import com.jamesdube.laravelnewsapp.http.Client;
+import com.jamesdube.laravelnewsapp.http.requests.onGetPosts;
+import com.jamesdube.laravelnewsapp.http.requests.onSavePosts;
 import com.jamesdube.laravelnewsapp.util.Notify;
 
 import java.util.ArrayList;
@@ -8,6 +12,7 @@ import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmQuery;
+import io.realm.RealmResults;
 
 /**
  * Created by rick on 1/22/17.
@@ -16,16 +21,43 @@ import io.realm.RealmQuery;
 public class PostRepository {
 
     /**
+     * Fetch any new posts and save them to the db
+     * @param onSavePosts Callback called when the request is finished
+     */
+    public static void fetch(final onSavePosts onSavePosts) {
+
+        Client.getPosts(new onGetPosts() {
+            @Override
+            public void onSuccess(List<Post> posts) {
+                List<Post> newPosts = filterNewPosts(posts);
+                //save new posts
+                if(newPosts.size() > 0){
+                    save(newPosts,onSavePosts);
+                }else{
+                    onSavePosts.onSaved();
+                }
+
+            }
+
+            @Override
+            public void onFailure(VolleyError error) {
+                onSavePosts.onError();
+            }
+        });
+
+    }
+
+    /**
      * Get All the Posts that have not been marked as read.
      * @return RealmResults<Post>
      */
-    public static List<Post> getUnreadPosts(){
-        return App.Realm().copyToRealm(App.Realm()
+    public static RealmResults<Post> getUnreadPosts(){
+        return App.Realm()
                 .where(Post.class)
                 .equalTo("wasRead",false)
                 .or()
                 .isNull("wasRead")
-                .findAll());
+                .findAll();
     }
 
     /**
@@ -50,7 +82,7 @@ public class PostRepository {
      * Save the given list of posts
      * @param posts
      */
-    public static void savePosts(final List<Post> posts){
+    public static void save(final List<Post> posts, final onSavePosts onSavePosts){
         App.Realm().executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
@@ -62,11 +94,13 @@ public class PostRepository {
                 System.out.println("(" + String.valueOf(posts.size()) + ") post(s) saved successfully");
                 //send new posts notification
                 Notify.newPostNotification(posts);
+                onSavePosts.onSaved();
             }
         }, new Realm.Transaction.OnError() {
             @Override
             public void onError(Throwable error) {
                 System.out.println("There was an error saving the posts");
+                onSavePosts.onError();
             }
         });
     }
@@ -80,5 +114,17 @@ public class PostRepository {
         RealmQuery<Post> query = App.Realm().where(Post.class)
                 .equalTo("link", link);
         return query.count() != 0;
+    }
+
+    /**
+     * Archive the selected post
+     */
+    public static void archive(final Post post){
+        App.Realm().executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                post.setWasRead(true);
+            }
+        });
     }
 }
