@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.jamesdube.laravelnewsapp.App;
+import com.jamesdube.laravelnewsapp.MainActivity;
 import com.jamesdube.laravelnewsapp.R;
 import com.jamesdube.laravelnewsapp.adapters.PostAdapter;
 import com.jamesdube.laravelnewsapp.models.Post;
@@ -26,15 +27,18 @@ import com.jamesdube.laravelnewsapp.sync.SyncAdapter;
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmResults;
 
 public class PostsFragment extends Fragment {
 
-    RecyclerView postsRecyclerview;
-    PostAdapter postAdapter;
-    List<Post> posts;
+    RecyclerView recyclerView;
+    PostAdapter adapter;
+    Realm realm;
+    BroadcastReceiver syncSuccess,syncError;
+    RealmChangeListener<RealmResults<Post>> changeListener;
     SwipeRefreshLayout swipeRefreshLayout;
-
-   public static PostsFragment newInstance() {
+    public static PostsFragment newInstance() {
 
         Bundle args = new Bundle();
 
@@ -47,7 +51,8 @@ public class PostsFragment extends Fragment {
     public void onStart() {
         super.onStart();
         boot();
-        setupPosts();
+        //SyncAdapter.initializeSyncAdapter(getActivity());
+
     }
 
     @Nullable
@@ -57,40 +62,66 @@ public class PostsFragment extends Fragment {
     }
 
     private void boot() {
-        postsRecyclerview = (RecyclerView) getActivity().findViewById(R.id.postsRecyclerview);
-        postsRecyclerview.setLayoutManager(new LinearLayoutManager(App.getAppContext()));
+
+        recyclerView = (RecyclerView) getActivity().findViewById(R.id.postsRecyclerview);
         swipeRefreshLayout = (SwipeRefreshLayout) getActivity().findViewById(R.id.postsSwipeLayout);
-        //Implement onRefresh Action
+        // ... boilerplate omitted for brevity
+        realm = Realm.getDefaultInstance();
+        // get all the posts
+        final RealmResults<Post> posts = PostRepository.getUnreadPosts();
+        // ... build a list adapter and set it to the ListView/RecyclerView/etc
+        adapter = new PostAdapter(posts);
+        // set up a Realm change listener
+
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                //get posts
-                SyncAdapter.syncImmediately(getActivity());
+                Log.d(App.Tag,"posts fragment onRefresh");
+                registerReceivers();
+                SyncAdapter.syncImmediately(App.getAppContext());
             }
         });
-        getActivity().registerReceiver(syncFinishedReceiver,new IntentFilter(SyncAdapter.SYNC_FINISHED));
 
-    }
-
-
-        private BroadcastReceiver syncFinishedReceiver = new BroadcastReceiver() {
+        syncSuccess = new BroadcastReceiver() {
 
             @Override
             public void onReceive(Context context, Intent intent) {
                 Log.d("xxxx ", "Sync finished, should refresh nao!!");
                 swipeRefreshLayout.setRefreshing(false);
                 //repopulate
-                postAdapter.clear();
-                postAdapter.addAll(PostRepository.getUnreadPosts());
-                postAdapter.notifyDataSetChanged();
+                adapter.notifyDataSetChanged();
+                unRegisterReceivers();
+                MainActivity.showSnackBar("posts Refreshed...");
 
             }
         };
 
-    private void setupPosts(){
-        //setup
-        posts = PostRepository.getUnreadPosts();
-        ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT){
+        syncError = new BroadcastReceiver() {
+
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Log.d("xxxx ", "Sync finished with error");
+                swipeRefreshLayout.setRefreshing(false);
+                //repopulate
+                adapter.notifyDataSetChanged();
+                //notify the user
+                MainActivity.showSnackBar("Cannot refresh feed at the moment...");
+                unRegisterReceivers();
+
+            }
+        };
+
+        changeListener = new RealmChangeListener<RealmResults<Post>>() {
+
+            @Override
+            public void onChange(RealmResults<Post> element) {
+                Log.d(App.Tag,"posts fragment onChange posts("+element.size()+")");
+                adapter.notifyDataSetChanged(); // Update the UI
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        };
+
+        ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT){
 
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
@@ -99,31 +130,31 @@ public class PostsFragment extends Fragment {
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                archivePost(viewHolder.getAdapterPosition());
+                Post post = adapter.getPost(viewHolder.getAdapterPosition());
+                PostRepository.archive(post);
+                adapter.notifyDataSetChanged();
             }
         };
+
         ItemTouchHelper touchHelper = new ItemTouchHelper(simpleCallback);
-        touchHelper.attachToRecyclerView(postsRecyclerview);
-        postAdapter = new PostAdapter(getContext(),posts);
-        postsRecyclerview.setAdapter(postAdapter);
+        touchHelper.attachToRecyclerView(recyclerView);
+        // Tell Realm to notify our listener when the posts results
+        // have changed (items added, removed, updated, anything of the sort).
+
+        posts.addChangeListener(changeListener);
+        recyclerView.setLayoutManager(new LinearLayoutManager(App.getAppContext()));
+        recyclerView.setAdapter(adapter);
+
     }
 
-    private void archivePost(final int postPosition) {
-        final Post post = posts.get(postPosition);
-        final String link = post.getLink();
+    private void registerReceivers() {
+        getActivity().registerReceiver(syncSuccess,new IntentFilter(SyncAdapter.SYNC_FINISHED));
+        getActivity().registerReceiver(syncError,new IntentFilter(SyncAdapter.SYNC_FINISHED_ERROR));
+    }
 
-        App.Realm().executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                Post post1 = realm.where(Post.class).equalTo("link",link).findFirst();
-                post1.setWasRead(true);
-                realm.copyToRealmOrUpdate(post1);
-            }
-        });
-        //setupPosts();
-        posts.remove(postPosition);
-        postAdapter.notifyDataSetChanged();
-
+    private void unRegisterReceivers() {
+        getActivity().unregisterReceiver(syncSuccess);
+        getActivity().unregisterReceiver(syncError);
     }
 
 
