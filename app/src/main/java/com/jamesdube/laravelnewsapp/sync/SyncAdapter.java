@@ -15,6 +15,7 @@ import com.jamesdube.laravelnewsapp.App;
 import com.jamesdube.laravelnewsapp.R;
 import com.jamesdube.laravelnewsapp.http.Client;
 import com.jamesdube.laravelnewsapp.http.requests.onGetPosts;
+import com.jamesdube.laravelnewsapp.http.requests.onSavePosts;
 import com.jamesdube.laravelnewsapp.models.Post;
 import com.jamesdube.laravelnewsapp.models.PostRepository;
 import com.jamesdube.laravelnewsapp.util.Notify;
@@ -37,7 +38,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     public static final String AUTHORITY    = "com.jamesdube.laravelnewsapp.provider";
     public static final String ACCOUNT_TYPE = "com.jamesdube.laravelnewsapp";
     public static final String ACCOUNT      = "Laravel Artisan";
-    public static final String SYNC_FINISHED      = "com.jamesdube.DYNC";
+    public static final String SYNC_FINISHED      = "com.jamesdube.SYNC_FINISHED";
+    public static final String SYNC_FINISHED_ERROR = "com.jamesdube.SYNC_FINISHED_ERROR";
 
 
     public SyncAdapter(Context context, boolean autoInitialize) {
@@ -48,35 +50,22 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
         System.out.println("xxxx onPerformSync...");
-        //fetch posts
-        Client.getPosts(new onGetPosts() {
+
+        PostRepository.fetch(new onSavePosts() {
             @Override
-            public void onSuccess(List<Post> posts) {
-                System.out.println("xxxx found (" + String.valueOf(posts.size()) + ") posts...");
-                //filter existing posts
-                List<Post> newPosts = PostRepository.filterNewPosts(posts);
-                System.out.println("xxxx got (" + String.valueOf(newPosts.size()) + ") posts after filtering...");
-                for (Post filteredPost : newPosts) {
-                    System.out.println("xxxx newPost : " + filteredPost.getTitle());
-                }
-                //save new posts
-                if(newPosts.size() > 0){
-                    PostRepository.savePosts(newPosts);
-                }
+            public void onSaved() {
                 //Broadcast the sync result
                 Intent i = new Intent(SYNC_FINISHED);
                 sendBroadcast(i);
             }
 
             @Override
-            public void onFailure() {
-                System.out.println("xxxx failed to get posts...");
+            public void onError() {
+                //Broadcast the sync result
+                Intent i = new Intent(SYNC_FINISHED_ERROR);
+                sendBroadcast(i);
             }
         });
-        //filter existing posts
-        //save new posts
-        //send new posts notification
-
     }
 
     private void sendBroadcast(Intent i) {
@@ -89,17 +78,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     public static void configurePeriodicSync(Context context, int syncInterval, int flexTime) {
         Account account = getSyncAccount(context);
         String authority = AUTHORITY;
-/*        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            // we can enable inexact timers in our periodic sync
-            SyncRequest request = new SyncRequest.Builder().
-                    syncPeriodic(syncInterval, flexTime).
-                    setSyncAdapter(account, authority).
-                    setExtras(new Bundle()).build();
-            ContentResolver.requestSync(request);
-        } else {
-            ContentResolver.addPeriodicSync(account,
-                    authority, new Bundle(), syncInterval);
-        }*/
         ContentResolver.addPeriodicSync(account,authority,new Bundle(),90);
     }
 
@@ -147,16 +125,16 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         /*
          * Finally, let's do a sync to get things started
          */
-        syncImmediately(context);
+        //syncImmediately(context);
     }
 
     public static void syncImmediately(Context context) {
+
         Bundle bundle = new Bundle();
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
         ContentResolver.requestSync(getSyncAccount(context),
                 AUTHORITY, bundle);
-        Log.d("LNA", "syncImmediately: ");
         System.out.println("xxxx syncImmediately");
     }
 
