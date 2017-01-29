@@ -93,7 +93,7 @@ public class PostRepository {
             public void onSuccess() {
                 System.out.println("(" + String.valueOf(posts.size()) + ") post(s) saved successfully");
                 //send new posts notification
-                Notify.newPostNotification(posts);
+                Notify.showNewPostNotifications();
                 onSavePosts.onSaved();
             }
         }, new Realm.Transaction.OnError() {
