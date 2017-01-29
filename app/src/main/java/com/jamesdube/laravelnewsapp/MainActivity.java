@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.jamesdube.laravelnewsapp.models.PostRepository;
 import com.jamesdube.laravelnewsapp.posts.PostsFragment;
 import com.jamesdube.laravelnewsapp.sync.SyncAdapter;
 import com.jamesdube.laravelnewsapp.util.Themes;
@@ -48,6 +49,9 @@ public class MainActivity extends AppCompatActivity
                 .replace(R.id.postsFragment, PostsFragment.newInstance())
                 .commit();
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.mainCoordinatorLayout);
+
+        //Set all posts as seen
+        PostRepository.setPostsAsSeen();
     }
 
     public static void showSnackBar(String message) {

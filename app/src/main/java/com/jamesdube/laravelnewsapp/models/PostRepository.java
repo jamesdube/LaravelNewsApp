@@ -1,5 +1,7 @@
 package com.jamesdube.laravelnewsapp.models;
 
+import android.util.Log;
+
 import com.android.volley.VolleyError;
 import com.jamesdube.laravelnewsapp.App;
 import com.jamesdube.laravelnewsapp.http.Client;
@@ -29,7 +31,7 @@ public class PostRepository {
         Client.getPosts(new onGetPosts() {
             @Override
             public void onSuccess(List<Post> posts) {
-                List<Post> newPosts = filterNewPosts(posts);
+                List<Post> newPosts = filterNew(posts);
                 //save new posts
                 if(newPosts.size() > 0){
                     save(newPosts,onSavePosts);
@@ -48,15 +50,15 @@ public class PostRepository {
     }
 
     /**
-     * Get All the Posts that have not been marked as read.
+     * Get All the Posts that have not been archived.
      * @return RealmResults<Post>
      */
-    public static RealmResults<Post> getUnreadPosts(){
+    public static RealmResults<Post> getActive(){
         return App.Realm()
                 .where(Post.class)
-                .equalTo("wasRead",false)
+                .equalTo("active",true)
                 .or()
-                .isNull("wasRead")
+                .isNull("active")
                 .findAll();
     }
 
@@ -64,14 +66,14 @@ public class PostRepository {
      * Remove existing posts from list
      * @param posts
      */
-    public static List<Post> filterNewPosts(List<Post> posts){
+    public static List<Post> filterNew(List<Post> posts){
         List<Post> newPosts = new ArrayList<>();
         for(Post post : posts ){
-            if(!postExists(post.getLink())){
+            if(!exists(post.getLink())){
                 newPosts.add(post);
-                System.out.println("xxxx postExists false -> " + post.getTitle());
+                System.out.println("xxxx exists false -> " + post.getTitle());
             }else {
-                System.out.println("xxxx postExists true ->  " + post.getTitle());
+                System.out.println("xxxx exists true ->  " + post.getTitle());
             }
 
         }
@@ -86,6 +88,13 @@ public class PostRepository {
         App.Realm().executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
+                //@todo Extract this to a parser
+                for(Post post : posts)
+                {
+                    post.extractImageUrl();
+                    post.setActive(true);
+                    post.setSeen(false);
+                }
                 realm.copyToRealm(posts);
             }
         }, new Realm.Transaction.OnSuccess() {
@@ -110,7 +119,7 @@ public class PostRepository {
      * @param link
      * @return boolean
      */
-    public static boolean postExists(String link){
+    public static boolean exists(String link){
         RealmQuery<Post> query = App.Realm().where(Post.class)
                 .equalTo("link", link);
         return query.count() != 0;
@@ -123,8 +132,46 @@ public class PostRepository {
         App.Realm().executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                post.setWasRead(true);
+                post.setActive(false);
             }
         });
+    }
+
+    /**
+     * Get the posts that have not been seen by the user
+     * @return
+     */
+    public static List<Post> getUnSeen() {
+        return App.Realm().where(Post.class).equalTo("seen",false)
+                .or()
+                .isNull("seen")
+                .findAll();
+    }
+
+    public static void setPostsAsSeen(){
+        App.Realm().executeTransactionAsync(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    Log.d(App.Tag, "marking all posts as seen.... ");
+                    List<Post> posts = realm.where(Post.class).findAll();
+                    for(Post post : posts){
+                        post.setSeen(true);
+                    }
+                }
+            },
+            new Realm.Transaction.OnSuccess() {
+                @Override
+                public void onSuccess() {
+                    Log.d(App.Tag, "marking all posts as seen.... onSuccess");
+
+                }
+            },
+            new Realm.Transaction.OnError() {
+                @Override
+                public void onError(Throwable error) {
+                    Log.d(App.Tag, "marking all posts as seen.... onError => " + error.getMessage());
+                }
+            }
+        );
     }
 }

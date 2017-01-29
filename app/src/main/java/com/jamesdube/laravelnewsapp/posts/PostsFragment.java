@@ -24,8 +24,6 @@ import com.jamesdube.laravelnewsapp.models.Post;
 import com.jamesdube.laravelnewsapp.models.PostRepository;
 import com.jamesdube.laravelnewsapp.sync.SyncAdapter;
 
-import java.util.List;
-
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
@@ -68,7 +66,7 @@ public class PostsFragment extends Fragment {
         // ... boilerplate omitted for brevity
         realm = Realm.getDefaultInstance();
         // get all the posts
-        final RealmResults<Post> posts = PostRepository.getUnreadPosts();
+        final RealmResults<Post> posts = PostRepository.getActive();
         // ... build a list adapter and set it to the ListView/RecyclerView/etc
         adapter = new PostAdapter(posts);
         // set up a Realm change listener

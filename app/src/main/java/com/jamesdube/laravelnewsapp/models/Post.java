@@ -32,8 +32,10 @@ public class Post extends RealmObject{
     //The Published Date
     private String pubDate;
 
-    //Article was read
-    private Boolean wasRead;
+    //Article archived or not
+    private Boolean active;
+
+    private Boolean seen;
 
 
 
@@ -125,11 +127,19 @@ public class Post extends RealmObject{
         }
     }
 
-    public Boolean getWasRead() {
-        return wasRead;
+    public Boolean getActive() {
+        return active;
     }
 
-    public void setWasRead(Boolean wasRead) {
-        this.wasRead = wasRead;
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+    public Boolean getSeen() {
+        return seen;
+    }
+
+    public void setSeen(Boolean seen) {
+        this.seen = seen;
     }
 }
