@@ -53,17 +53,16 @@ public class PostActivity extends AppCompatActivity {
         postTitle.setText(post.getTitle());
 
         //set the pub date
-        pubDate.setText(post.getPubDate());
+        pubDate.setText(post.getPubDate().toString());
 
         //set the Image
         Glide.with(App.getAppContext())
                 .load(post.getCoverImage())
                 .into(postImage);
 
-        String html = prepHtml(post);
 
         //load the content
-        webView.loadDataWithBaseURL("file:///android_asset/", html, "text/html", "utf-8", null);
+        webView.loadDataWithBaseURL("file:///android_asset/", post.getDescription(), "text/html", "utf-8", null);
 
     }
 
@@ -75,12 +74,7 @@ public class PostActivity extends AppCompatActivity {
         return Post.fromJson(post);
     }
 
-    private String prepHtml(Post post){
-        return "<HTML><HEAD><link href=\"style.css\" type=\"text/css\" rel=\"stylesheet\"/></HEAD><body>" +
-                "<div class=\"container-fluid\"><div class=\"row\"> <div class=\"col-lg-12\">" +
-                post.getDescription().replaceFirst("<img([^<]*)>", "") +
-                " </div></div></div></body></HTML>";
-    }
+
 
     private void boot(){
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

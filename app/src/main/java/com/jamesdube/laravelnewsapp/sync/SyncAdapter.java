@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SyncResult;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.jamesdube.laravelnewsapp.App;
@@ -19,6 +20,7 @@ import com.jamesdube.laravelnewsapp.http.requests.onSavePosts;
 import com.jamesdube.laravelnewsapp.models.Post;
 import com.jamesdube.laravelnewsapp.models.PostRepository;
 import com.jamesdube.laravelnewsapp.util.Notify;
+import com.jamesdube.laravelnewsapp.util.Prefs;
 
 import java.util.List;
 
@@ -78,7 +80,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     public static void configurePeriodicSync(Context context, int syncInterval, int flexTime) {
         Account account = getSyncAccount(context);
         String authority = AUTHORITY;
-        ContentResolver.addPeriodicSync(account,authority,new Bundle(),90);
+
+        ContentResolver.addPeriodicSync(account,authority,new Bundle(), syncInterval);
     }
 
     public static Account getSyncAccount(Context context) {
@@ -115,7 +118,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         /*
          * Since we've created an account
          */
-        configurePeriodicSync(context, SYNC_INTERVAL, SYNC_FLEXTIME);
+        configurePeriodicSync(context, Prefs.getSyncInterval(), SYNC_FLEXTIME);
 
         /*
          * Without calling setSyncAutomatically, our periodic sync will not be enabled.

@@ -69,11 +69,13 @@ public class PostRepository {
     public static List<Post> filterNew(List<Post> posts){
         List<Post> newPosts = new ArrayList<>();
         for(Post post : posts ){
+            System.out.println("xxxx filter -> cat(" + String.valueOf(post.getCategories().size()) +") authors(" + String.valueOf(post.getAuthors().size())+ ") "+ ") link(" +  post.getLink()+ ") "+  post.getTitle());
             if(!exists(post.getLink())){
+
                 newPosts.add(post);
-                System.out.println("xxxx exists false -> " + post.getTitle());
+                //System.out.println("xxxx exists false -> " + post.getTitle());
             }else {
-                System.out.println("xxxx exists true ->  " + post.getTitle());
+                //System.out.println("xxxx exists true ->  " + post.getTitle());
             }
 
         }
@@ -88,13 +90,6 @@ public class PostRepository {
         App.Realm().executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                //@todo Extract this to a parser
-                for(Post post : posts)
-                {
-                    post.extractImageUrl();
-                    post.setActive(true);
-                    post.setSeen(false);
-                }
                 realm.copyToRealm(posts);
             }
         }, new Realm.Transaction.OnSuccess() {
