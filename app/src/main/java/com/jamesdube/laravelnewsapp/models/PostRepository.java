@@ -15,6 +15,7 @@ import java.util.List;
 import io.realm.Realm;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 /**
  * Created by rick on 1/22/17.
@@ -59,7 +60,7 @@ public class PostRepository {
                 .equalTo("active",true)
                 .or()
                 .isNull("active")
-                .findAll();
+                .findAllSorted("pubDate", Sort.DESCENDING);
     }
 
     /**
@@ -140,7 +141,7 @@ public class PostRepository {
         return App.Realm().where(Post.class).equalTo("seen",false)
                 .or()
                 .isNull("seen")
-                .findAll();
+                .findAllSorted("pubDate",Sort.DESCENDING);
     }
 
     public static void setPostsAsSeen(){
