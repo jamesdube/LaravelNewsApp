@@ -42,9 +42,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     public void onBindViewHolder(final PostViewHolder holder, final int position) {
 
         holder.title.setText(posts.get(position).getTitle());
-        Glide.with(App.getAppContext()).load(posts.get(position).getCoverImage())
+        holder.category.setText(posts.get(position).getCategories().first().getName());
+        Glide.with(App.getAppContext()).load(getRandomImage())
                 .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .into(holder.coverImage);
+
         holder.coverImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,14 +104,14 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
 
     public class PostViewHolder extends RecyclerView.ViewHolder{
         TextView title;
-        TextView subTitle;
+        TextView category;
         ImageView coverImage;
 
         PostViewHolder(View itemView) {
             super(itemView);
 
             title = (TextView) itemView.findViewById(R.id.postTitle);
-            //subTitle = (TextView) itemView.findViewById(R.id.postSubtitle);
+            category = (TextView) itemView.findViewById(R.id.postCategory);
             coverImage = (ImageView) itemView.findViewById(R.id.postCoverImage);
         }
     }
