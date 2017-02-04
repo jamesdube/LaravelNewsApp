@@ -7,6 +7,7 @@ import com.jamesdube.laravelnewsapp.App;
 import com.jamesdube.laravelnewsapp.http.Client;
 import com.jamesdube.laravelnewsapp.http.requests.onGetPosts;
 import com.jamesdube.laravelnewsapp.http.requests.onSavePosts;
+import com.jamesdube.laravelnewsapp.util.Constants;
 import com.jamesdube.laravelnewsapp.util.Notify;
 
 import java.util.ArrayList;
@@ -72,6 +73,16 @@ public class PostRepository {
                 .where(Post.class)
                 .equalTo("active",false)
                 .findAllSorted("pubDate", Sort.DESCENDING);
+    }
+
+    /**
+     * Get All the Posts that have been tagged by the given category.
+     * @return RealmResults<Post>
+     */
+    public static RealmResults<Post> getByCategory(String category){
+        return getActive().where()
+                .equalTo("categories.name",category)
+                .findAll();
     }
 
     /**

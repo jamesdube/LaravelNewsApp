@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -20,6 +21,15 @@ import com.jamesdube.laravelnewsapp.models.PostRepository;
 import com.jamesdube.laravelnewsapp.posts.PostsFragment;
 import com.jamesdube.laravelnewsapp.sync.SyncAdapter;
 import com.jamesdube.laravelnewsapp.util.Themes;
+
+import static com.jamesdube.laravelnewsapp.util.Constants.POSTS_ACTIVE;
+import static com.jamesdube.laravelnewsapp.util.Constants.POSTS_ARCHIVED;
+import static com.jamesdube.laravelnewsapp.util.Constants.POSTS_PACKAGES;
+import static com.jamesdube.laravelnewsapp.util.Constants.POSTS_TUTORIALS;
+import static com.jamesdube.laravelnewsapp.util.Constants.TITLE_ARCHIVED;
+import static com.jamesdube.laravelnewsapp.util.Constants.TITLE_HOME;
+import static com.jamesdube.laravelnewsapp.util.Constants.TITLE_PACKAGES;
+import static com.jamesdube.laravelnewsapp.util.Constants.TITLE_TUTORIALS;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -111,14 +121,18 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_blog) {
-            postsFragment.setPosts(PostsFragment.POSTS_ACTIVE);
+        if (id == R.id.nav_home) {
+            postsFragment.setPosts(POSTS_ACTIVE);
+            setTitle(TITLE_HOME);
         } else if (id == R.id.nav_archived) {
-           postsFragment.setPosts(PostsFragment.POSTS_ARCHIVED);
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_archive) {
-
+           postsFragment.setPosts(POSTS_ARCHIVED);
+            setTitle(TITLE_ARCHIVED);
+        } else if (id == R.id.nav_packages) {
+            setTitle(TITLE_PACKAGES);
+            postsFragment.setPosts(POSTS_PACKAGES);
+        } else if (id == R.id.nav_tutorials) {
+            setTitle(TITLE_TUTORIALS);
+            postsFragment.setPosts(POSTS_TUTORIALS);
         } else if (id == R.id.nav_share) {
             SyncAdapter.syncImmediately(this);
         }
@@ -126,5 +140,17 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    /**
+     * Set the Title of the activity
+     */
+    private void setTitle(String title){
+
+        ActionBar actionBar = getSupportActionBar();
+        if(actionBar != null){
+            actionBar.setTitle(title);
+        }
+
     }
 }

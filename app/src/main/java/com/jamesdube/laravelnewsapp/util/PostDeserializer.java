@@ -23,6 +23,12 @@ import java.util.regex.Pattern;
 
 import io.realm.RealmList;
 
+import static com.jamesdube.laravelnewsapp.util.Constants.AUTHOR;
+import static com.jamesdube.laravelnewsapp.util.Constants.CATEGORY;
+import static com.jamesdube.laravelnewsapp.util.Constants.COVER_IMAGE;
+import static com.jamesdube.laravelnewsapp.util.Constants.DESCRIPTION;
+import static com.jamesdube.laravelnewsapp.util.Constants.LINK;
+import static com.jamesdube.laravelnewsapp.util.Constants.TITLE;
 import static com.jamesdube.laravelnewsapp.util.CustomDateSerializer.dateFormat;
 
 
@@ -37,12 +43,7 @@ public class PostDeserializer implements JsonDeserializer<Post> {
     private RealmList<Author> authors = new RealmList<>();
     private RealmList<Category> categories = new RealmList<>();
 
-    private static final String CATEGORY = "category";
-    private static final String LINK = "link";
-    private static final String TITLE = "title";
-    private static final String AUTHOR = "dc:creator";
-    private static final String DESCRIPTION = "description";
-    private static final String COVER_IMAGE = "coverImage";
+
 
 
     @Override

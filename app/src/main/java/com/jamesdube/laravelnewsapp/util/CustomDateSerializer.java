@@ -11,7 +11,7 @@ import java.util.Date;
 
 public class CustomDateSerializer implements JsonSerializer<Date> {
 
-    public static final SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");
+    public static final SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.DATE_FORMAT);
 
     public JsonElement serialize(Date date, Type typeOfSrc, JsonSerializationContext context) {
         return new JsonPrimitive(dateFormat.format(date));

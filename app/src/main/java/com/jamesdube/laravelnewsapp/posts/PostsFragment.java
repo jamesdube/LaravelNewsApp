@@ -30,6 +30,13 @@ import java.util.List;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 
+import static com.jamesdube.laravelnewsapp.util.Constants.CATEGORY_PACKAGES;
+import static com.jamesdube.laravelnewsapp.util.Constants.CATEGORY_TUTORIALS;
+import static com.jamesdube.laravelnewsapp.util.Constants.POSTS_ACTIVE;
+import static com.jamesdube.laravelnewsapp.util.Constants.POSTS_ARCHIVED;
+import static com.jamesdube.laravelnewsapp.util.Constants.POSTS_PACKAGES;
+import static com.jamesdube.laravelnewsapp.util.Constants.POSTS_TUTORIALS;
+
 public class PostsFragment extends Fragment {
 
     RecyclerView recyclerView;
@@ -38,8 +45,7 @@ public class PostsFragment extends Fragment {
     RealmChangeListener<RealmResults<Post>> changeListener;
     SwipeRefreshLayout swipeRefreshLayout;
     public static final String POSTS = "POSTS";
-    public static final String POSTS_ACTIVE = "POSTS_ACTIVE";
-    public static final String POSTS_ARCHIVED = "POSTS_ARCHIVED";
+
 
     public static PostsFragment newInstance() {
 
@@ -89,7 +95,7 @@ public class PostsFragment extends Fragment {
                 //repopulate
                 adapter.notifyDataSetChanged();
                 unRegisterReceivers();
-                MainActivity.showSnackBar("posts Refreshed...");
+                MainActivity.showSnackBar("Refresh complete...");
 
             }
         };
@@ -172,6 +178,12 @@ public class PostsFragment extends Fragment {
             }
             case POSTS_ARCHIVED: {
                 return PostRepository.getArchived();
+            }
+            case POSTS_PACKAGES: {
+                return PostRepository.getByCategory(CATEGORY_PACKAGES);
+            }
+            case POSTS_TUTORIALS: {
+                return PostRepository.getByCategory(CATEGORY_TUTORIALS);
             }
             default: {
                 return PostRepository.getActive();
