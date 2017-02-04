@@ -5,6 +5,7 @@ import android.accounts.AccountManager;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -28,6 +29,8 @@ import com.jamesdube.laravelnewsapp.adapters.PostAdapter;
 import com.jamesdube.laravelnewsapp.models.Post;
 import com.jamesdube.laravelnewsapp.sync.SyncAdapter;
 import com.jamesdube.laravelnewsapp.util.Themes;
+
+import org.ocpsoft.prettytime.PrettyTime;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -53,7 +56,7 @@ public class PostActivity extends AppCompatActivity {
         postTitle.setText(post.getTitle());
 
         //set the pub date
-        pubDate.setText(post.getPubDate().toString());
+        pubDate.setText(getHumanFriendlyTime(post.getPubDate()));
 
         //set the Image
         Glide.with(App.getAppContext())
@@ -64,6 +67,12 @@ public class PostActivity extends AppCompatActivity {
         //load the content
         webView.loadDataWithBaseURL("file:///android_asset/", post.getDescription(), "text/html", "utf-8", null);
 
+    }
+
+    @NonNull
+    private String getHumanFriendlyTime(Date date) {
+        PrettyTime prettyTime = new PrettyTime(date);
+        return prettyTime.formatApproximateDuration(new Date()) + " ago";
     }
 
     private Post getPost(){
