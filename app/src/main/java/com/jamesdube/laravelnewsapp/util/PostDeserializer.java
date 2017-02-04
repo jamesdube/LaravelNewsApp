@@ -36,11 +36,12 @@ public class PostDeserializer implements JsonDeserializer<Post> {
     private RealmList<Author> authors = new RealmList<>();
     private RealmList<Category> categories = new RealmList<>();
 
-    public static final String CATEGORY = "category";
-    public static final String LINK = "link";
-    public static final String TITLE = "title";
-    public static final String AUTHOR = "dc:creator";
-    public static final String DESCRIPTION = "description";
+    private static final String CATEGORY = "category";
+    private static final String LINK = "link";
+    private static final String TITLE = "title";
+    private static final String AUTHOR = "dc:creator";
+    private static final String DESCRIPTION = "description";
+    private static final String COVER_IMAGE = "coverImage";
 
 
     @Override
@@ -153,8 +154,12 @@ public class PostDeserializer implements JsonDeserializer<Post> {
     }
     
     private PostDeserializer parseCoverImage(){
+
+        if (json.getAsJsonObject().get(COVER_IMAGE).isJsonPrimitive()) {
+            coverImage = json.getAsJsonObject().get(COVER_IMAGE).getAsString();
+        }
         
-        if(description != null){
+        else if(description != null){
             Pattern pattern = Pattern.compile("<img src=\"(.*?)\">");
             Matcher matcher = pattern.matcher(description);
             if(matcher.find()){
