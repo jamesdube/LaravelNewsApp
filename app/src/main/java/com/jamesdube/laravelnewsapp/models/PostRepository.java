@@ -64,6 +64,17 @@ public class PostRepository {
     }
 
     /**
+     * Get All the Posts that have been archived.
+     * @return RealmResults<Post>
+     */
+    public static RealmResults<Post> getArchived(){
+        return App.Realm()
+                .where(Post.class)
+                .equalTo("active",false)
+                .findAllSorted("pubDate", Sort.DESCENDING);
+    }
+
+    /**
      * Remove existing posts from list
      * @param posts
      */
