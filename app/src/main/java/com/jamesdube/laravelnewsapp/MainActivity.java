@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.jamesdube.laravelnewsapp.models.PostRepository;
 import com.jamesdube.laravelnewsapp.posts.PostsFragment;
@@ -64,6 +65,10 @@ public class MainActivity extends AppCompatActivity
 
     public static void showSnackBar(String message) {
         Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_LONG).show();
+    }
+
+    public static void showSnackBarWithAction(String message,String actionText, View.OnClickListener action) {
+        Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_LONG).setAction(actionText,action).show();
     }
 
 

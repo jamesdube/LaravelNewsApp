@@ -128,9 +128,18 @@ public class PostsFragment extends Fragment {
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                Post post = adapter.getPost(viewHolder.getAdapterPosition());
+                final Post post = adapter.getPost(viewHolder.getAdapterPosition());
                 PostRepository.archive(post);
                 adapter.notifyDataSetChanged();
+
+                //show notification
+                MainActivity.showSnackBarWithAction("Post archived", "Undo", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        PostRepository.unArchive(post);
+                        adapter.notifyDataSetChanged();
+                    }
+                });
             }
         };
 

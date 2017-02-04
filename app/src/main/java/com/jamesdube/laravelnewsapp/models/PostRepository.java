@@ -145,6 +145,18 @@ public class PostRepository {
     }
 
     /**
+     * UnArchive the selected post
+     */
+    public static void unArchive(final Post post){
+        App.Realm().executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                post.setActive(true);
+            }
+        });
+    }
+
+    /**
      * Get the posts that have not been seen by the user
      * @return
      */
