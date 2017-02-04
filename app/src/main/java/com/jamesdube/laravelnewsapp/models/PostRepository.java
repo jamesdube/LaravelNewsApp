@@ -81,7 +81,7 @@ public class PostRepository {
     public static List<Post> filterNew(List<Post> posts){
         List<Post> newPosts = new ArrayList<>();
         for(Post post : posts ){
-            System.out.println("xxxx filter -> cat(" + String.valueOf(post.getCategories().size()) +") authors(" + String.valueOf(post.getAuthors().size())+ ") "+ ") link(" +  post.getLink()+ ") "+  post.getTitle());
+            //System.out.println("xxxx filter -> cat(" + String.valueOf(post.getCategories().size()) +") authors(" + String.valueOf(post.getAuthors().size())+ ") "+ ") link(" +  post.getLink()+ ") "+  post.getTitle());
             if(!exists(post.getLink())){
 
                 newPosts.add(post);

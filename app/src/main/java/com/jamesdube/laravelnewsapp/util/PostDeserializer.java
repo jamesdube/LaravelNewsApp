@@ -5,6 +5,7 @@ import android.util.Log;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.jamesdube.laravelnewsapp.App;
 import com.jamesdube.laravelnewsapp.models.Author;
@@ -83,14 +84,15 @@ public class PostDeserializer implements JsonDeserializer<Post> {
 
         if(json.getAsJsonObject().get(CATEGORY).isJsonPrimitive()){
             String name = json.getAsJsonObject().get(CATEGORY).getAsString();
-            categories.add(new Category(name));
+            categories.add(new Category(name.trim()));
         }else if(json.getAsJsonObject().get(CATEGORY).isJsonArray()){
             for(int i = 0; i < json.getAsJsonObject().get(CATEGORY).getAsJsonArray().size(); i ++){
-                categories.add(new Category(json.getAsJsonObject()
+                JsonObject categoryObject = json.getAsJsonObject()
                         .get(CATEGORY)
                         .getAsJsonArray()
                         .get(i)
-                        .toString()));
+                        .getAsJsonObject();
+                categories.add(new Category(categoryObject.get("content").getAsString().trim()));
             }
         }
 
@@ -100,14 +102,15 @@ public class PostDeserializer implements JsonDeserializer<Post> {
     private PostDeserializer parseAuthor() {
         if(json.getAsJsonObject().get(AUTHOR).isJsonPrimitive()){
             String name = json.getAsJsonObject().get(AUTHOR).getAsString();
-            authors.add(new Author(name));
+            authors.add(new Author(name.trim()));
         }else if(json.getAsJsonObject().get(AUTHOR).isJsonArray()){
             for(int i = 0; i < json.getAsJsonObject().get(AUTHOR).getAsJsonArray().size(); i ++){
-                authors.add(new Author(json.getAsJsonObject()
+                JsonObject authorObject = json.getAsJsonObject()
                         .get(AUTHOR)
                         .getAsJsonArray()
                         .get(i)
-                        .toString()));
+                        .getAsJsonObject();
+                authors.add(new Author(authorObject.get("name").getAsString().trim()));
             }
         }
 
@@ -155,10 +158,13 @@ public class PostDeserializer implements JsonDeserializer<Post> {
     
     private PostDeserializer parseCoverImage(){
 
-        if (json.getAsJsonObject().get(COVER_IMAGE).isJsonPrimitive()) {
-            coverImage = json.getAsJsonObject().get(COVER_IMAGE).getAsString();
+        JsonElement coverImageElement = json.getAsJsonObject().get(COVER_IMAGE);
+
+        if(coverImageElement != null){
+            if (coverImageElement.isJsonPrimitive()) {
+                coverImage = coverImageElement.getAsString();
+            }
         }
-        
         else if(description != null){
             Pattern pattern = Pattern.compile("<img src=\"(.*?)\">");
             Matcher matcher = pattern.matcher(description);

@@ -1,5 +1,7 @@
 package com.jamesdube.laravelnewsapp.models;
 
+import com.google.gson.annotations.SerializedName;
+
 import io.realm.RealmObject;
 
 /**
@@ -8,6 +10,7 @@ import io.realm.RealmObject;
 
 public class Category extends RealmObject {
 
+    @SerializedName("content")
     private String name;
 
     public Category(String name){
