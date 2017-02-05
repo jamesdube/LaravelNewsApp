@@ -22,6 +22,8 @@ import com.jamesdube.laravelnewsapp.posts.PostsFragment;
 import com.jamesdube.laravelnewsapp.sync.SyncAdapter;
 import com.jamesdube.laravelnewsapp.util.Themes;
 
+import static com.jamesdube.laravelnewsapp.util.Constants.CATEGORY_PACKAGES;
+import static com.jamesdube.laravelnewsapp.util.Constants.CATEGORY_TUTORIALS;
 import static com.jamesdube.laravelnewsapp.util.Constants.POSTS_ACTIVE;
 import static com.jamesdube.laravelnewsapp.util.Constants.POSTS_ARCHIVED;
 import static com.jamesdube.laravelnewsapp.util.Constants.POSTS_PACKAGES;
@@ -37,6 +39,7 @@ public class MainActivity extends AppCompatActivity
     static CoordinatorLayout coordinatorLayout;
     FragmentManager fragmentManager;
     PostsFragment postsFragment;
+    public static String Title = TITLE_HOME;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +51,8 @@ public class MainActivity extends AppCompatActivity
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        resolveTitle();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -122,19 +127,18 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-            postsFragment.setPosts(POSTS_ACTIVE);
-            setTitle(TITLE_HOME);
+            changePosts(POSTS_ACTIVE);
+            //Title = TITLE_HOME;
         } else if (id == R.id.nav_archived) {
-           postsFragment.setPosts(POSTS_ARCHIVED);
-            setTitle(TITLE_ARCHIVED);
+            changePosts(POSTS_ARCHIVED);
         } else if (id == R.id.nav_packages) {
-            setTitle(TITLE_PACKAGES);
-            postsFragment.setPosts(POSTS_PACKAGES);
+            //Title = TITLE_PACKAGES;
+            changePosts(POSTS_PACKAGES);
         } else if (id == R.id.nav_tutorials) {
-            setTitle(TITLE_TUTORIALS);
-            postsFragment.setPosts(POSTS_TUTORIALS);
+            //Title = TITLE_TUTORIALS;
+            changePosts(POSTS_TUTORIALS);
         } else if (id == R.id.nav_share) {
-            SyncAdapter.syncImmediately(this);
+            startActivity(new Intent(App.getAppContext(),SettingsActivity.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -142,15 +146,49 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    /**
-     * Set the Title of the activity
-     */
-    private void setTitle(String title){
+    private void changePosts(String posts) {
+        postsFragment.setPosts(posts);
+        Title = posts;
+        resolveTitle();
+    }
 
+    private void setTitle(String title) {
         ActionBar actionBar = getSupportActionBar();
         if(actionBar != null){
             actionBar.setTitle(title);
         }
+    }
+
+    /**
+     * Set the Title of the activity
+     */
+    private void resolveTitle(){
+
+        String title ;
+
+        switch (Title) {
+            case POSTS_ACTIVE: {
+                title = TITLE_HOME;
+                break;
+            }
+            case POSTS_ARCHIVED: {
+                title = TITLE_ARCHIVED;
+                break;
+            }
+            case POSTS_PACKAGES: {
+                title = TITLE_PACKAGES;
+                break;
+            }
+            case POSTS_TUTORIALS: {
+                title = TITLE_TUTORIALS;
+                break;
+            }
+            default: {
+                title = TITLE_HOME;
+            }
+        }
+
+        setTitle(title);
 
     }
 }

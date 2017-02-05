@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -30,6 +31,7 @@ import java.util.List;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 
+import static com.jamesdube.laravelnewsapp.MainActivity.Title;
 import static com.jamesdube.laravelnewsapp.util.Constants.CATEGORY_PACKAGES;
 import static com.jamesdube.laravelnewsapp.util.Constants.CATEGORY_TUTORIALS;
 import static com.jamesdube.laravelnewsapp.util.Constants.POSTS_ACTIVE;
@@ -44,7 +46,7 @@ public class PostsFragment extends Fragment {
     BroadcastReceiver syncSuccess,syncError;
     RealmChangeListener<RealmResults<Post>> changeListener;
     SwipeRefreshLayout swipeRefreshLayout;
-    public static final String POSTS = "POSTS";
+    public static String POSTS = "POSTS";
 
 
     public static PostsFragment newInstance() {
@@ -72,7 +74,7 @@ public class PostsFragment extends Fragment {
 
     private void boot() {
 
-        RealmResults <Post> posts = getPosts(POSTS_ACTIVE);
+        RealmResults <Post> posts = getPosts();
 
         recyclerView = (RecyclerView) getActivity().findViewById(R.id.postsRecyclerview);
         swipeRefreshLayout = (SwipeRefreshLayout) getActivity().findViewById(R.id.postsSwipeLayout);
@@ -160,7 +162,13 @@ public class PostsFragment extends Fragment {
 
     public void setPosts(String criteria) {
 
-        RealmResults<Post> posts = getPosts(criteria);
+        POSTS = criteria;
+
+        //change the title
+        Title = (POSTS);
+
+
+        RealmResults<Post> posts = getPosts();
 
         posts.addChangeListener(changeListener);
 
@@ -170,9 +178,9 @@ public class PostsFragment extends Fragment {
     }
 
     @NonNull
-    private RealmResults<Post> getPosts(String criteria) {
+    private RealmResults<Post> getPosts() {
 
-        switch (criteria) {
+        switch (POSTS) {
             case POSTS_ACTIVE: {
                 return PostRepository.getActive();
             }
