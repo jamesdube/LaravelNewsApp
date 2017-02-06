@@ -5,9 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -26,18 +28,28 @@ import com.jamesdube.laravelnewsapp.sync.SyncAdapter;
 
 import java.util.List;
 
-import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
+
+import static com.jamesdube.laravelnewsapp.MainActivity.Title;
+import static com.jamesdube.laravelnewsapp.util.Constants.CATEGORY_PACKAGES;
+import static com.jamesdube.laravelnewsapp.util.Constants.CATEGORY_TUTORIALS;
+import static com.jamesdube.laravelnewsapp.util.Constants.POSTS_ACTIVE;
+import static com.jamesdube.laravelnewsapp.util.Constants.POSTS_ARCHIVED;
+import static com.jamesdube.laravelnewsapp.util.Constants.POSTS_FAVOURITES;
+import static com.jamesdube.laravelnewsapp.util.Constants.POSTS_PACKAGES;
+import static com.jamesdube.laravelnewsapp.util.Constants.POSTS_TUTORIALS;
 
 public class PostsFragment extends Fragment {
 
     RecyclerView recyclerView;
     PostAdapter adapter;
-    Realm realm;
     BroadcastReceiver syncSuccess,syncError;
     RealmChangeListener<RealmResults<Post>> changeListener;
     SwipeRefreshLayout swipeRefreshLayout;
+    public static String POSTS = "POSTS";
+
+
     public static PostsFragment newInstance() {
 
         Bundle args = new Bundle();
@@ -51,7 +63,6 @@ public class PostsFragment extends Fragment {
     public void onStart() {
         super.onStart();
         boot();
-        //SyncAdapter.initializeSyncAdapter(getActivity());
 
     }
 
@@ -63,15 +74,10 @@ public class PostsFragment extends Fragment {
 
     private void boot() {
 
+        RealmResults <Post> posts = getPosts();
+
         recyclerView = (RecyclerView) getActivity().findViewById(R.id.postsRecyclerview);
         swipeRefreshLayout = (SwipeRefreshLayout) getActivity().findViewById(R.id.postsSwipeLayout);
-        // ... boilerplate omitted for brevity
-        realm = Realm.getDefaultInstance();
-        // get all the posts
-        final RealmResults<Post> posts = PostRepository.getUnreadPosts();
-        // ... build a list adapter and set it to the ListView/RecyclerView/etc
-        adapter = new PostAdapter(posts);
-        // set up a Realm change listener
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -91,7 +97,7 @@ public class PostsFragment extends Fragment {
                 //repopulate
                 adapter.notifyDataSetChanged();
                 unRegisterReceivers();
-                MainActivity.showSnackBar("posts Refreshed...");
+                MainActivity.showSnackBar("Refresh complete...");
 
             }
         };
@@ -130,9 +136,18 @@ public class PostsFragment extends Fragment {
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                Post post = adapter.getPost(viewHolder.getAdapterPosition());
+                final Post post = adapter.getPost(viewHolder.getAdapterPosition());
                 PostRepository.archive(post);
                 adapter.notifyDataSetChanged();
+
+                //show notification
+                MainActivity.showSnackBarWithAction("Post archived", "Undo", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        PostRepository.unArchive(post);
+                        adapter.notifyDataSetChanged();
+                    }
+                });
             }
         };
 
@@ -141,9 +156,58 @@ public class PostsFragment extends Fragment {
         // Tell Realm to notify our listener when the posts results
         // have changed (items added, removed, updated, anything of the sort).
 
+        setupAdapter(posts);
+
+    }
+
+    public void setPosts(String criteria) {
+
+        POSTS = criteria;
+
+        //change the title
+        Title = (POSTS);
+
+
+        RealmResults<Post> posts = getPosts();
+
         posts.addChangeListener(changeListener);
+
+        adapter = new PostAdapter(posts);
+
+        recyclerView.swapAdapter(adapter,true);
+    }
+
+    @NonNull
+    private RealmResults<Post> getPosts() {
+
+        switch (POSTS) {
+            case POSTS_ACTIVE: {
+                return PostRepository.getActive();
+            }
+            case POSTS_ARCHIVED: {
+                return PostRepository.getArchived();
+            }
+            case POSTS_PACKAGES: {
+                return PostRepository.getByCategory(CATEGORY_PACKAGES);
+            }
+            case POSTS_TUTORIALS: {
+                return PostRepository.getByCategory(CATEGORY_TUTORIALS);
+            }
+            case POSTS_FAVOURITES: {
+                return PostRepository.getFavourites();
+            }
+            default: {
+                return PostRepository.getActive();
+            }
+        }
+    }
+
+    public void setupAdapter(RealmResults<Post> posts) {
+        posts.addChangeListener(changeListener);
+        adapter = new PostAdapter(posts);
         recyclerView.setLayoutManager(new LinearLayoutManager(App.getAppContext()));
         recyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
 
     }
 

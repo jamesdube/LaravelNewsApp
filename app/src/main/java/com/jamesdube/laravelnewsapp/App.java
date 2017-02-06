@@ -5,7 +5,13 @@ import android.content.Context;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.jamesdube.laravelnewsapp.models.Post;
+import com.jamesdube.laravelnewsapp.util.CustomDateSerializer;
+import com.jamesdube.laravelnewsapp.util.PostDeserializer;
 import com.jamesdube.laravelnewsapp.util.Themes;
+
+import java.util.Date;
 
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
@@ -43,7 +49,7 @@ public class App extends Application {
     //Gson Singleton
     public static Gson Gson(){
         if(gson == null){
-            gson = new Gson();
+            configureGson();
         }
         return gson;
     }
@@ -69,5 +75,14 @@ public class App extends Application {
         }
 
         return realm;
+    }
+
+    private static void configureGson() {
+        // Configure GSON
+        final GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.registerTypeAdapter(Date.class, new CustomDateSerializer());
+        gsonBuilder.registerTypeAdapter(Post.class, new PostDeserializer());
+        gsonBuilder.setPrettyPrinting();
+        gson = gsonBuilder.create();
     }
 }

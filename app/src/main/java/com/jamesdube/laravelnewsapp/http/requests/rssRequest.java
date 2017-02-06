@@ -18,9 +18,6 @@ import org.json.JSONObject;
 
 import fr.arnaudguyon.xmltojsonlib.XmlToJson;
 
-/**
- * Created by rick on 1/7/17.
- */
 
 public class rssRequest {
 
@@ -73,7 +70,7 @@ public class rssRequest {
         RequestQueue queue = Volley.newRequestQueue(App.getAppContext());
         StringRequest stringRequest = new StringRequest(
                 Request.Method.GET,
-                request.URL.LARAVEL_FEED_URL,
+                request.URL.LARAVEL_FEED_URL_LIVE,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

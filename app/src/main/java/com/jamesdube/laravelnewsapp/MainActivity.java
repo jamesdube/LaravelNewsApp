@@ -5,23 +5,43 @@ import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
+import com.jamesdube.laravelnewsapp.models.PostRepository;
 import com.jamesdube.laravelnewsapp.posts.PostsFragment;
 import com.jamesdube.laravelnewsapp.sync.SyncAdapter;
 import com.jamesdube.laravelnewsapp.util.Themes;
+
+import static com.jamesdube.laravelnewsapp.util.Constants.CATEGORY_PACKAGES;
+import static com.jamesdube.laravelnewsapp.util.Constants.CATEGORY_TUTORIALS;
+import static com.jamesdube.laravelnewsapp.util.Constants.POSTS_ACTIVE;
+import static com.jamesdube.laravelnewsapp.util.Constants.POSTS_ARCHIVED;
+import static com.jamesdube.laravelnewsapp.util.Constants.POSTS_FAVOURITES;
+import static com.jamesdube.laravelnewsapp.util.Constants.POSTS_PACKAGES;
+import static com.jamesdube.laravelnewsapp.util.Constants.POSTS_TUTORIALS;
+import static com.jamesdube.laravelnewsapp.util.Constants.TITLE_ARCHIVED;
+import static com.jamesdube.laravelnewsapp.util.Constants.TITLE_FAVOURITES;
+import static com.jamesdube.laravelnewsapp.util.Constants.TITLE_HOME;
+import static com.jamesdube.laravelnewsapp.util.Constants.TITLE_PACKAGES;
+import static com.jamesdube.laravelnewsapp.util.Constants.TITLE_TUTORIALS;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     static CoordinatorLayout coordinatorLayout;
+    FragmentManager fragmentManager;
+    PostsFragment postsFragment;
+    public static String Title = TITLE_HOME;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +54,8 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        resolveTitle();
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -43,15 +65,27 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.postsFragment, PostsFragment.newInstance())
-                .commit();
+        fragmentManager = getSupportFragmentManager();
+        postsFragment = PostsFragment.newInstance();
+        commitFragment(postsFragment);
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.mainCoordinatorLayout);
+
+        //Set all posts as seen
+        PostRepository.setPostsAsSeen();
+    }
+
+    private void commitFragment(Fragment fragment) {
+        fragmentManager.beginTransaction()
+                .replace(R.id.postsFragment, fragment)
+                .commit();
     }
 
     public static void showSnackBar(String message) {
         Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_LONG).show();
+    }
+
+    public static void showSnackBarWithAction(String message,String actionText, View.OnClickListener action) {
+        Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_LONG).setAction(actionText,action).show();
     }
 
 
@@ -94,20 +128,72 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_blog) {
-            // Handle the camera action
-        } else if (id == R.id.nav_tutorial) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_archive) {
-
+        if (id == R.id.nav_home) {
+            changePosts(POSTS_ACTIVE);
+        } else if (id == R.id.nav_archived) {
+            changePosts(POSTS_ARCHIVED);
+        } else if (id == R.id.nav_packages) {
+            changePosts(POSTS_PACKAGES);
+        } else if (id == R.id.nav_tutorials) {
+            changePosts(POSTS_TUTORIALS);
+        } else if (id == R.id.nav_favourites) {
+            changePosts(POSTS_FAVOURITES);
         } else if (id == R.id.nav_share) {
-            SyncAdapter.syncImmediately(this);
+            startActivity(new Intent(App.getAppContext(),SettingsActivity.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void changePosts(String posts) {
+        postsFragment.setPosts(posts);
+        Title = posts;
+        resolveTitle();
+    }
+
+    private void setTitle(String title) {
+        ActionBar actionBar = getSupportActionBar();
+        if(actionBar != null){
+            actionBar.setTitle(title);
+        }
+    }
+
+    /**
+     * Set the Title of the activity
+     */
+    private void resolveTitle(){
+
+        String title ;
+
+        switch (Title) {
+            case POSTS_ACTIVE: {
+                title = TITLE_HOME;
+                break;
+            }
+            case POSTS_ARCHIVED: {
+                title = TITLE_ARCHIVED;
+                break;
+            }
+            case POSTS_PACKAGES: {
+                title = TITLE_PACKAGES;
+                break;
+            }
+            case POSTS_TUTORIALS: {
+                title = TITLE_TUTORIALS;
+                break;
+            }
+            case POSTS_FAVOURITES: {
+                title = TITLE_FAVOURITES;
+                break;
+            }
+            default: {
+                title = TITLE_HOME;
+            }
+        }
+
+        setTitle(title);
+
     }
 }

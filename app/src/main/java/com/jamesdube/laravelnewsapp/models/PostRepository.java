@@ -1,10 +1,13 @@
 package com.jamesdube.laravelnewsapp.models;
 
+import android.util.Log;
+
 import com.android.volley.VolleyError;
 import com.jamesdube.laravelnewsapp.App;
 import com.jamesdube.laravelnewsapp.http.Client;
 import com.jamesdube.laravelnewsapp.http.requests.onGetPosts;
 import com.jamesdube.laravelnewsapp.http.requests.onSavePosts;
+import com.jamesdube.laravelnewsapp.util.Constants;
 import com.jamesdube.laravelnewsapp.util.Notify;
 
 import java.util.ArrayList;
@@ -13,6 +16,7 @@ import java.util.List;
 import io.realm.Realm;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 /**
  * Created by rick on 1/22/17.
@@ -29,7 +33,7 @@ public class PostRepository {
         Client.getPosts(new onGetPosts() {
             @Override
             public void onSuccess(List<Post> posts) {
-                List<Post> newPosts = filterNewPosts(posts);
+                List<Post> newPosts = filterNew(posts);
                 //save new posts
                 if(newPosts.size() > 0){
                     save(newPosts,onSavePosts);
@@ -48,15 +52,46 @@ public class PostRepository {
     }
 
     /**
-     * Get All the Posts that have not been marked as read.
+     * Get All the Posts that have not been archived.
      * @return RealmResults<Post>
      */
-    public static RealmResults<Post> getUnreadPosts(){
+    public static RealmResults<Post> getActive(){
         return App.Realm()
                 .where(Post.class)
-                .equalTo("wasRead",false)
+                .equalTo("active",true)
                 .or()
-                .isNull("wasRead")
+                .isNull("active")
+                .findAllSorted("pubDate", Sort.DESCENDING);
+    }
+
+    /**
+     * Get All the Posts that have been archived.
+     * @return RealmResults<Post>
+     */
+    public static RealmResults<Post> getArchived(){
+        return App.Realm()
+                .where(Post.class)
+                .equalTo("active",false)
+                .findAllSorted("pubDate", Sort.DESCENDING);
+    }
+
+    /**
+     * Get All the Posts that have been tagged as favourite.
+     * @return RealmResults<Post>
+     */
+    public static RealmResults<Post> getFavourites(){
+        return getActive().where()
+                .equalTo("favourite",true)
+                .findAll();
+    }
+
+    /**
+     * Get All the Posts that have been tagged by the given category.
+     * @return RealmResults<Post>
+     */
+    public static RealmResults<Post> getByCategory(String category){
+        return getActive().where()
+                .equalTo("categories.name",category)
                 .findAll();
     }
 
@@ -64,14 +99,16 @@ public class PostRepository {
      * Remove existing posts from list
      * @param posts
      */
-    public static List<Post> filterNewPosts(List<Post> posts){
+    public static List<Post> filterNew(List<Post> posts){
         List<Post> newPosts = new ArrayList<>();
         for(Post post : posts ){
-            if(!postExists(post.getLink())){
+            //System.out.println("xxxx filter -> cat(" + String.valueOf(post.getCategories().size()) +") authors(" + String.valueOf(post.getAuthors().size())+ ") "+ ") link(" +  post.getLink()+ ") "+  post.getTitle());
+            if(!exists(post.getLink())){
+
                 newPosts.add(post);
-                System.out.println("xxxx postExists false -> " + post.getTitle());
+                //System.out.println("xxxx exists false -> " + post.getTitle());
             }else {
-                System.out.println("xxxx postExists true ->  " + post.getTitle());
+                //System.out.println("xxxx exists true ->  " + post.getTitle());
             }
 
         }
@@ -93,7 +130,7 @@ public class PostRepository {
             public void onSuccess() {
                 System.out.println("(" + String.valueOf(posts.size()) + ") post(s) saved successfully");
                 //send new posts notification
-                Notify.newPostNotification(posts);
+                Notify.showNewPostNotifications();
                 onSavePosts.onSaved();
             }
         }, new Realm.Transaction.OnError() {
@@ -110,7 +147,7 @@ public class PostRepository {
      * @param link
      * @return boolean
      */
-    public static boolean postExists(String link){
+    public static boolean exists(String link){
         RealmQuery<Post> query = App.Realm().where(Post.class)
                 .equalTo("link", link);
         return query.count() != 0;
@@ -123,8 +160,122 @@ public class PostRepository {
         App.Realm().executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                post.setWasRead(true);
+                post.setActive(false);
             }
         });
+    }
+
+    /**
+     * UnArchive the selected post
+     */
+    public static void unArchive(final Post post){
+        App.Realm().executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                post.setActive(true);
+            }
+        });
+    }
+
+    /**
+     * Favourite the selected post
+     */
+    public static void favourite(final Post post, final onChangeField changeField){
+
+        final Post copied = App.Realm().copyFromRealm(post);
+        App.Realm().executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                Post postFav = realm.where(Post.class).equalTo("link",copied.getLink()).findFirst();
+                Boolean change = postFav.isFavourite();
+                if(postFav.isFavourite() == null){
+                    change = false;
+                }
+                postFav.setFavourite(!change);
+                Log.d(App.Tag, "post fav => " + String.valueOf(postFav.isFavourite()));
+                //fav.setFavourite(true);
+            }
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                Log.d(App.Tag,"Post added to favourites");
+                changeField.onSuccess();
+            }
+        }, new Realm.Transaction.OnError() {
+            @Override
+            public void onError(Throwable error) {
+                Log.d(App.Tag,"Error adding to favourites");
+                changeField.onError(error);
+                error.printStackTrace();
+            }
+        });
+
+        Log.d(App.Tag,"post favourite => " + String.valueOf(post.isFavourite()));
+    }
+
+    /**
+     * UnFavourite the selected post
+     */
+    public static void changeField(final onChangeField onChangeField){
+        App.Realm().executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+            }
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                Log.d(App.Tag, "onChangeField success");
+                onChangeField.onSuccess();
+            }
+        }, new Realm.Transaction.OnError() {
+            @Override
+            public void onError(Throwable error) {
+                Log.d(App.Tag, "onChangeField error");
+                onChangeField.onError(error);
+            }
+        });
+    }
+
+    /**
+     * Get the posts that have not been seen by the user
+     * @return
+     */
+    public static List<Post> getUnSeen() {
+        return App.Realm().where(Post.class).equalTo("seen",false)
+                .or()
+                .isNull("seen")
+                .findAllSorted("pubDate",Sort.DESCENDING);
+    }
+
+    public static void setPostsAsSeen(){
+        App.Realm().executeTransactionAsync(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    Log.d(App.Tag, "marking all posts as seen.... ");
+                    List<Post> posts = realm.where(Post.class).findAll();
+                    for(Post post : posts){
+                        post.setSeen(true);
+                    }
+                }
+            },
+            new Realm.Transaction.OnSuccess() {
+                @Override
+                public void onSuccess() {
+                    Log.d(App.Tag, "marking all posts as seen.... onSuccess");
+
+                }
+            },
+            new Realm.Transaction.OnError() {
+                @Override
+                public void onError(Throwable error) {
+                    Log.d(App.Tag, "marking all posts as seen.... onError => " + error.getMessage());
+                }
+            }
+        );
+    }
+
+    public interface onChangeField{
+        void onSuccess();
+        void onError(Throwable error);
     }
 }

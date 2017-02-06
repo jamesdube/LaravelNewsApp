@@ -41,19 +41,18 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     @Override
     public void onBindViewHolder(final PostViewHolder holder, final int position) {
 
-
         holder.title.setText(posts.get(position).getTitle());
-        //holder.subTitle.setText(posts.get(position).getSubTitle());
-        //holder.coverImage.setImageUrl(posts.get(position).getCoverImage(),new ImageLoader());
-        Glide.with(App.getAppContext()).load(getRandomImage())
+        holder.category.setText(posts.get(position).getCategories().first().getName());
+        Glide.with(App.getAppContext()).load(posts.get(position).getCoverImage())
+                .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .into(holder.coverImage);
+
         holder.coverImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent postIntent = new Intent(App.getAppContext(), PostActivity.class);
                 postIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                postIntent.putExtra("POST",posts.get(position).toJson());
-                System.out.println(posts.get(position).toJson());
+                postIntent.putExtra("POST",posts.get(position).getLink());
                 App.getAppContext().startActivity(postIntent);
             }
         });
@@ -104,14 +103,14 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
 
     public class PostViewHolder extends RecyclerView.ViewHolder{
         TextView title;
-        TextView subTitle;
+        TextView category;
         ImageView coverImage;
 
         PostViewHolder(View itemView) {
             super(itemView);
 
             title = (TextView) itemView.findViewById(R.id.postTitle);
-            //subTitle = (TextView) itemView.findViewById(R.id.postSubtitle);
+            category = (TextView) itemView.findViewById(R.id.postCategory);
             coverImage = (ImageView) itemView.findViewById(R.id.postCoverImage);
         }
     }
