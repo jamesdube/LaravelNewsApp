@@ -26,9 +26,11 @@ import static com.jamesdube.laravelnewsapp.util.Constants.CATEGORY_PACKAGES;
 import static com.jamesdube.laravelnewsapp.util.Constants.CATEGORY_TUTORIALS;
 import static com.jamesdube.laravelnewsapp.util.Constants.POSTS_ACTIVE;
 import static com.jamesdube.laravelnewsapp.util.Constants.POSTS_ARCHIVED;
+import static com.jamesdube.laravelnewsapp.util.Constants.POSTS_FAVOURITES;
 import static com.jamesdube.laravelnewsapp.util.Constants.POSTS_PACKAGES;
 import static com.jamesdube.laravelnewsapp.util.Constants.POSTS_TUTORIALS;
 import static com.jamesdube.laravelnewsapp.util.Constants.TITLE_ARCHIVED;
+import static com.jamesdube.laravelnewsapp.util.Constants.TITLE_FAVOURITES;
 import static com.jamesdube.laravelnewsapp.util.Constants.TITLE_HOME;
 import static com.jamesdube.laravelnewsapp.util.Constants.TITLE_PACKAGES;
 import static com.jamesdube.laravelnewsapp.util.Constants.TITLE_TUTORIALS;
@@ -128,15 +130,14 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_home) {
             changePosts(POSTS_ACTIVE);
-            //Title = TITLE_HOME;
         } else if (id == R.id.nav_archived) {
             changePosts(POSTS_ARCHIVED);
         } else if (id == R.id.nav_packages) {
-            //Title = TITLE_PACKAGES;
             changePosts(POSTS_PACKAGES);
         } else if (id == R.id.nav_tutorials) {
-            //Title = TITLE_TUTORIALS;
             changePosts(POSTS_TUTORIALS);
+        } else if (id == R.id.nav_favourites) {
+            changePosts(POSTS_FAVOURITES);
         } else if (id == R.id.nav_share) {
             startActivity(new Intent(App.getAppContext(),SettingsActivity.class));
         }
@@ -181,6 +182,10 @@ public class MainActivity extends AppCompatActivity
             }
             case POSTS_TUTORIALS: {
                 title = TITLE_TUTORIALS;
+                break;
+            }
+            case POSTS_FAVOURITES: {
+                title = TITLE_FAVOURITES;
                 break;
             }
             default: {

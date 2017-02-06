@@ -41,6 +41,9 @@ public class Post extends RealmObject{
 
     private Boolean seen;
 
+    //
+    private Boolean favourite;
+
     /**
      * Post constructor
      * @param title Post Title
@@ -137,5 +140,13 @@ public class Post extends RealmObject{
 
     public static Post fromJson(String post) {
         return App.Gson().fromJson(post,Post.class);
+    }
+
+    public Boolean isFavourite() {
+        return favourite;
+    }
+
+    public void setFavourite(Boolean favourite) {
+        this.favourite = favourite;
     }
 }

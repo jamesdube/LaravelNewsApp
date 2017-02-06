@@ -43,7 +43,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
 
         holder.title.setText(posts.get(position).getTitle());
         holder.category.setText(posts.get(position).getCategories().first().getName());
-        Glide.with(App.getAppContext()).load(getRandomImage())
+        Glide.with(App.getAppContext()).load(posts.get(position).getCoverImage())
                 .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .into(holder.coverImage);
 
@@ -52,8 +52,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             public void onClick(View v) {
                 Intent postIntent = new Intent(App.getAppContext(), PostActivity.class);
                 postIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                postIntent.putExtra("POST",posts.get(position).toJson());
-                System.out.println(posts.get(position).toJson());
+                postIntent.putExtra("POST",posts.get(position).getLink());
                 App.getAppContext().startActivity(postIntent);
             }
         });

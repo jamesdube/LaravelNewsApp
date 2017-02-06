@@ -36,6 +36,7 @@ import static com.jamesdube.laravelnewsapp.util.Constants.CATEGORY_PACKAGES;
 import static com.jamesdube.laravelnewsapp.util.Constants.CATEGORY_TUTORIALS;
 import static com.jamesdube.laravelnewsapp.util.Constants.POSTS_ACTIVE;
 import static com.jamesdube.laravelnewsapp.util.Constants.POSTS_ARCHIVED;
+import static com.jamesdube.laravelnewsapp.util.Constants.POSTS_FAVOURITES;
 import static com.jamesdube.laravelnewsapp.util.Constants.POSTS_PACKAGES;
 import static com.jamesdube.laravelnewsapp.util.Constants.POSTS_TUTORIALS;
 
@@ -62,7 +63,6 @@ public class PostsFragment extends Fragment {
     public void onStart() {
         super.onStart();
         boot();
-        //SyncAdapter.initializeSyncAdapter(getActivity());
 
     }
 
@@ -192,6 +192,9 @@ public class PostsFragment extends Fragment {
             }
             case POSTS_TUTORIALS: {
                 return PostRepository.getByCategory(CATEGORY_TUTORIALS);
+            }
+            case POSTS_FAVOURITES: {
+                return PostRepository.getFavourites();
             }
             default: {
                 return PostRepository.getActive();

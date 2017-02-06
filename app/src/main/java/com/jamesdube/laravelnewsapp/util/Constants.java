@@ -11,12 +11,14 @@ public class Constants {
     public static final String TITLE_TUTORIALS = "Tutorials";
     public static final String TITLE_PACKAGES = "Packages";
     public static final String TITLE_ARCHIVED = "Archived";
+    public static final String TITLE_FAVOURITES = "Favourites";
 
     //Post Types/Groups for Menu Nav
     public static final String POSTS_ACTIVE = "POSTS_ACTIVE";
     public static final String POSTS_ARCHIVED = "POSTS_ARCHIVED";
     public static final String POSTS_PACKAGES = "POSTS_PACKAGES";
     public static final String POSTS_TUTORIALS = "POSTS_TUTORIALS";
+    public static final String POSTS_FAVOURITES = "POSTS_FAVOURITES";
 
     //Post categories
     public static final String CATEGORY_PACKAGES = "Laravel Packages";

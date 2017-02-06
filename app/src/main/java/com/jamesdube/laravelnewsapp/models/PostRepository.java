@@ -76,6 +76,16 @@ public class PostRepository {
     }
 
     /**
+     * Get All the Posts that have been tagged as favourite.
+     * @return RealmResults<Post>
+     */
+    public static RealmResults<Post> getFavourites(){
+        return getActive().where()
+                .equalTo("favourite",true)
+                .findAll();
+    }
+
+    /**
      * Get All the Posts that have been tagged by the given category.
      * @return RealmResults<Post>
      */
@@ -168,6 +178,65 @@ public class PostRepository {
     }
 
     /**
+     * Favourite the selected post
+     */
+    public static void favourite(final Post post, final onChangeField changeField){
+
+        final Post copied = App.Realm().copyFromRealm(post);
+        App.Realm().executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                Post postFav = realm.where(Post.class).equalTo("link",copied.getLink()).findFirst();
+                Boolean change = postFav.isFavourite();
+                if(postFav.isFavourite() == null){
+                    change = false;
+                }
+                postFav.setFavourite(!change);
+                Log.d(App.Tag, "post fav => " + String.valueOf(postFav.isFavourite()));
+                //fav.setFavourite(true);
+            }
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                Log.d(App.Tag,"Post added to favourites");
+                changeField.onSuccess();
+            }
+        }, new Realm.Transaction.OnError() {
+            @Override
+            public void onError(Throwable error) {
+                Log.d(App.Tag,"Error adding to favourites");
+                changeField.onError(error);
+                error.printStackTrace();
+            }
+        });
+
+        Log.d(App.Tag,"post favourite => " + String.valueOf(post.isFavourite()));
+    }
+
+    /**
+     * UnFavourite the selected post
+     */
+    public static void changeField(final onChangeField onChangeField){
+        App.Realm().executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+            }
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                Log.d(App.Tag, "onChangeField success");
+                onChangeField.onSuccess();
+            }
+        }, new Realm.Transaction.OnError() {
+            @Override
+            public void onError(Throwable error) {
+                Log.d(App.Tag, "onChangeField error");
+                onChangeField.onError(error);
+            }
+        });
+    }
+
+    /**
      * Get the posts that have not been seen by the user
      * @return
      */
@@ -203,5 +272,10 @@ public class PostRepository {
                 }
             }
         );
+    }
+
+    public interface onChangeField{
+        void onSuccess();
+        void onError(Throwable error);
     }
 }
