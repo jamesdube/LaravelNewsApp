@@ -21,6 +21,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 
+import com.jamesdube.laravelnewsapp.sync.SyncAdapter;
 import com.jamesdube.laravelnewsapp.util.Themes;
 
 public class Settings extends AppCompatActivity {
@@ -60,6 +61,11 @@ public class Settings extends AppCompatActivity {
                         break;
                     case "sync_frequency":
                         Log.d(App.Tag,"pref sync => "+ prefs.getString(key,"ll"));
+                        //get the new interval
+                        String prefInterval = prefs.getString(key, "60");
+                        int interval = Integer.parseInt(prefInterval) * 60;
+
+                        SyncAdapter.configurePeriodicSync(App.getAppContext(),interval,0);
                         break;
                 }
             }
@@ -68,6 +74,11 @@ public class Settings extends AppCompatActivity {
         prefs.registerOnSharedPreferenceChangeListener(listener);
 
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);
     }
 
 
