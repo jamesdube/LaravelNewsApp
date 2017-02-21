@@ -74,6 +74,7 @@ public class PostDeserializer implements JsonDeserializer<Post> {
 
         post.setActive(true);
         post.setSeen(false);
+        post.setFavourite(false);
         
 
         return post;

@@ -27,9 +27,13 @@
     <item android:title="@string/other">
         <menu>
             <item
-                android:id="@+id/nav_share"
+                android:id="@+id/nav_settings"
                 android:icon="@drawable/ic_tutorial"
                 android:title="@string/settings" />
+            <item
+                android:id="@+id/nav_about"
+                android:icon="@drawable/ic_info"
+                android:title="@string/about" />
         </menu>
     </item>
 

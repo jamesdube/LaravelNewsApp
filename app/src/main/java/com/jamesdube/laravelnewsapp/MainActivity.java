@@ -13,6 +13,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +21,7 @@ import android.view.View;
 import com.jamesdube.laravelnewsapp.models.PostRepository;
 import com.jamesdube.laravelnewsapp.posts.PostsFragment;
 import com.jamesdube.laravelnewsapp.sync.SyncAdapter;
+import com.jamesdube.laravelnewsapp.util.Prefs;
 import com.jamesdube.laravelnewsapp.util.Themes;
 
 import static com.jamesdube.laravelnewsapp.util.Constants.CATEGORY_PACKAGES;
@@ -50,6 +52,8 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         //create account first
         SyncAdapter.initializeSyncAdapter(this);
+
+        Log.d(App.Tag,"interval => "+String.valueOf(Prefs.getSyncInterval()) + " sec");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -115,7 +119,7 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            startActivity(new Intent(App.getAppContext(),SettingsActivity.class));
+            startActivity(new Intent(App.getAppContext(),Settings.class));
             return true;
         }
 
@@ -138,8 +142,10 @@ public class MainActivity extends AppCompatActivity
             changePosts(POSTS_TUTORIALS);
         } else if (id == R.id.nav_favourites) {
             changePosts(POSTS_FAVOURITES);
-        } else if (id == R.id.nav_share) {
-            startActivity(new Intent(App.getAppContext(),SettingsActivity.class));
+        } else if (id == R.id.nav_settings) {
+            startActivity(new Intent(App.getAppContext(),Settings.class));
+        } else if (id == R.id.nav_about) {
+            startActivity(new Intent(App.getAppContext(),AboutActivity.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -151,6 +157,7 @@ public class MainActivity extends AppCompatActivity
         postsFragment.setPosts(posts);
         Title = posts;
         resolveTitle();
+
     }
 
     private void setTitle(String title) {

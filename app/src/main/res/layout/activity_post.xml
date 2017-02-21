@@ -28,7 +28,7 @@
         android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay"
+        android:theme="?ts"
         android:fitsSystemWindows="true">
 
         <android.support.design.widget.CollapsingToolbarLayout
@@ -63,9 +63,9 @@
                 android:layout_width="match_parent"
                 android:background="?attr/colorPrimary"
                 android:title=" "
-                android:theme="?ts"
                 android:layout_height="56dp"
                 android:id="@+id/toolbar"
+                app:theme="?ts"
                 />
 
             <LinearLayout
