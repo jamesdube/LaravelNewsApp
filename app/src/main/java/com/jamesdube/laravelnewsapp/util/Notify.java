@@ -33,7 +33,8 @@ public class Notify {
             }
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(App.getAppContext());
-        mBuilder.setSmallIcon(R.mipmap.ic_launcher)
+        mBuilder.setSmallIcon(R.drawable.ic_notifications)
+                .setColor(App.getAppContext().getResources().getColor(R.color.brandColor))
                 .setSound(getDefaultSoundUri())
                 .setAutoCancel(true)
                 .setContentTitle("Laravel News")
@@ -63,8 +64,7 @@ public class Notify {
 
             Post post = notificationPosts.get(0);
             resultIntent = new Intent(App.getAppContext(), PostActivity.class);
-            String json = post.toJson();
-            resultIntent.putExtra("POST", json);
+            resultIntent.putExtra("POST", post.getLink());
         }else{
             resultIntent = new Intent(App.getAppContext(), MainActivity.class);
         }
