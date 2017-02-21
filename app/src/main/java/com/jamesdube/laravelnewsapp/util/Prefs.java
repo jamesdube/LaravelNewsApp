@@ -21,10 +21,10 @@ public class Prefs {
 
     public static int getSyncInterval(){
 
-        int syncInterval =  PreferenceManager.getDefaultSharedPreferences(App.getAppContext().getApplicationContext())
-                .getInt("sync_frequency", SYNC_INTERVAL_THIRTY);
-        Log.d(App.Tag,"sync frequency => " + String.valueOf(syncInterval/60));
-        return syncInterval;
+        String syncInterval =  PreferenceManager.getDefaultSharedPreferences(App.getAppContext().getApplicationContext())
+                .getString("sync_frequency", "SYNC_INTERVAL_THIRTY");
+        Log.d(App.Tag,"sync frequency => " + syncInterval);
+        return (Integer.valueOf(syncInterval) * 60);
     }
 
     public static String getTheme(){
@@ -35,6 +35,11 @@ public class Prefs {
     public static boolean NotificationsEnabled(){
         return PreferenceManager.getDefaultSharedPreferences(App.getAppContext().getApplicationContext())
                 .getBoolean("notifications_new_message", true);
+    }
+
+    public static boolean NotificationVibrateEnabled(){
+        return PreferenceManager.getDefaultSharedPreferences(App.getAppContext().getApplicationContext())
+                .getBoolean("notifications_new_message_vibrate", true);
     }
 
 
