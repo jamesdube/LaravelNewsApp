@@ -26,30 +26,8 @@ public class Themes {
                 activity.setTheme(R.style.AppTheme_Dark_NoActionBar);
                 break;
             }
-            case "Laravel":{
-                activity.setTheme(R.style.AppTheme_Dark_NoActionBar);
-                break;
-            }
-            default:{
-                activity.setTheme(R.style.AppTheme_NoActionBar);
-                break;
-            }
-        }
-    }
-    public static void applySettingsTheme(Activity activity){
-        String theme = PreferenceManager.getDefaultSharedPreferences(activity.getApplicationContext())
-                .getString("pref_theme", "light");
-        switch (theme){
-            case "light":{
-                activity.setTheme(R.style.AppTheme);
-                break;
-            }
-            case "dark":{
-                activity.setTheme(R.style.AppTheme_Dark);
-                break;
-            }
-            case "Laravel":{
-                activity.setTheme(R.style.AppTheme_Dark);
+            case "laravel":{
+                activity.setTheme(R.style.AppTheme_Laravel_NoActionBar);
                 break;
             }
             default:{
