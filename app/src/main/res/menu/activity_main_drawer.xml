@@ -7,14 +7,6 @@
             android:icon="@drawable/ic_home"
             android:title="@string/home" />
         <item
-            android:id="@+id/nav_packages"
-            android:icon="@drawable/ic_packages"
-            android:title="@string/packages" />
-        <item
-            android:id="@+id/nav_tutorials"
-            android:icon="@drawable/ic_tutorials"
-            android:title="@string/tutorials" />
-        <item
             android:id="@+id/nav_favourites"
             android:icon="@drawable/ic_favorite"
             android:title="@string/favourite" />
