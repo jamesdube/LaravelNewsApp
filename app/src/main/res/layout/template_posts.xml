@@ -4,10 +4,12 @@
     android:layout_height="wrap_content">
 
     <android.support.v7.widget.CardView
+        android:background="?attr/colorPrimary"
         android:layout_width="match_parent"
         android:layout_margin="@dimen/card_margin"
         android:layout_height="wrap_content">
         <LinearLayout
+            android:background="?attr/colorPrimary"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -18,6 +20,7 @@
                 android:adjustViewBounds="true"
                 android:scaleType="fitCenter" />
             <LinearLayout
+                android:background="?attr/colorPrimary"
                 android:padding="15dp"
                 style="@style/Widget.CardContent"
                 android:orientation="vertical"
@@ -36,7 +39,7 @@
                 <TextView
                     android:id="@+id/postCategory"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@android:color/holo_red_light"
+                    android:textColor="?attr/colorAccent"
                     android:text="NEWS"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />

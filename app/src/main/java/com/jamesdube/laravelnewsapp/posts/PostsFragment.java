@@ -9,7 +9,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -17,6 +16,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.jamesdube.laravelnewsapp.App;
 import com.jamesdube.laravelnewsapp.MainActivity;
@@ -25,8 +26,7 @@ import com.jamesdube.laravelnewsapp.adapters.PostAdapter;
 import com.jamesdube.laravelnewsapp.models.Post;
 import com.jamesdube.laravelnewsapp.models.PostRepository;
 import com.jamesdube.laravelnewsapp.sync.SyncAdapter;
-
-import java.util.List;
+import com.jamesdube.laravelnewsapp.util.RecyclerViewEmptySupport;
 
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
@@ -42,8 +42,9 @@ import static com.jamesdube.laravelnewsapp.util.Constants.POSTS_TUTORIALS;
 
 public class PostsFragment extends Fragment {
 
-    RecyclerView recyclerView;
+    RecyclerViewEmptySupport recyclerView;
     PostAdapter adapter;
+    LinearLayout emptyView;
     BroadcastReceiver syncSuccess,syncError;
     RealmChangeListener<RealmResults<Post>> changeListener;
     SwipeRefreshLayout swipeRefreshLayout;
@@ -76,8 +77,9 @@ public class PostsFragment extends Fragment {
 
         RealmResults <Post> posts = getPosts();
 
-        recyclerView = (RecyclerView) getActivity().findViewById(R.id.postsRecyclerview);
+        recyclerView = (RecyclerViewEmptySupport) getActivity().findViewById(R.id.postsRecyclerview);
         swipeRefreshLayout = (SwipeRefreshLayout) getActivity().findViewById(R.id.postsSwipeLayout);
+        emptyView = (LinearLayout) getActivity().findViewById(R.id.postsEmptyView);
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -206,6 +208,7 @@ public class PostsFragment extends Fragment {
         posts.addChangeListener(changeListener);
         adapter = new PostAdapter(posts);
         recyclerView.setLayoutManager(new LinearLayoutManager(App.getAppContext()));
+        recyclerView.setEmptyView(emptyView);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
