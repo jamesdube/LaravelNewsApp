@@ -47,7 +47,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                 .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .into(holder.coverImage);
 
-        holder.coverImage.setOnClickListener(new View.OnClickListener() {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent postIntent = new Intent(App.getAppContext(), PostActivity.class);

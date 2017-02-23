@@ -136,16 +136,10 @@ public class MainActivity extends AppCompatActivity
             changePosts(POSTS_ACTIVE);
         } else if (id == R.id.nav_archived) {
             changePosts(POSTS_ARCHIVED);
-        } else if (id == R.id.nav_packages) {
-            changePosts(POSTS_PACKAGES);
-        } else if (id == R.id.nav_tutorials) {
-            changePosts(POSTS_TUTORIALS);
         } else if (id == R.id.nav_favourites) {
             changePosts(POSTS_FAVOURITES);
         } else if (id == R.id.nav_settings) {
             startActivity(new Intent(App.getAppContext(),Settings.class));
-        } else if (id == R.id.nav_about) {
-            startActivity(new Intent(App.getAppContext(),AboutActivity.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">LaravelNewsApp</string>
+    <string name="app_name">Laravel News App</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -21,6 +21,8 @@
 
     <string name="pref_title_display_name">Display name</string>
     <string name="pref_default_display_name">John Smith</string>
+    <string name="pref_title_about_laravel_news">Laravel News</string>
+
 
     <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
     <string-array name="pref_example_list_titles">
@@ -37,12 +39,10 @@
     <string-array name="pref_theme_titles">
         <item>Light</item>
         <item>Dark</item>
-        <item>Laravel</item>
     </string-array>
     <string-array name="pref_theme_values">
         <item>light</item>
         <item>dark</item>
-        <item>laravel</item>
     </string-array>
 
 

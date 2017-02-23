@@ -206,7 +206,7 @@ public class PostActivity extends AppCompatActivity {
         // Add data to the intent, the receiving app will decide
         // what to do with it.
         share.putExtra(Intent.EXTRA_SUBJECT, post.getTitle());
-        share.putExtra(Intent.EXTRA_TEXT, post.getLink() + " via Laravel News App .Get the application here (link)");
+        share.putExtra(Intent.EXTRA_TEXT, post.getLink() + " via Laravel News App .Get the application here: https://play.google.com/store/apps/details?id=com.jamesdube.laravelnewsapp");
 
         startActivity(Intent.createChooser(share, "Share link!"));
     }
