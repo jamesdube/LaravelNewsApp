@@ -24,6 +24,7 @@
             >
 
             <TextView
+                android:textColor="?attr/android:textColorPrimary"
                 android:id="@+id/text_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -37,6 +38,7 @@
                  />
 
             <TextView
+                android:textColor="?attr/android:textColorPrimary"
                 android:id="@+id/text_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
