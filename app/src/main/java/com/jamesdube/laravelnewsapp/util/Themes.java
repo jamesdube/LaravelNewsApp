@@ -26,10 +26,6 @@ public class Themes {
                 activity.setTheme(R.style.AppTheme_Dark_NoActionBar);
                 break;
             }
-            case "laravel":{
-                activity.setTheme(R.style.AppTheme_Laravel_NoActionBar);
-                break;
-            }
             default:{
                 activity.setTheme(R.style.AppTheme_NoActionBar);
                 break;
