@@ -176,7 +176,7 @@ public class PostsFragment extends Fragment {
 
         adapter = new PostAdapter(posts);
 
-        recyclerView.swapAdapter(adapter,true);
+        recyclerView.setAdapter(adapter);
     }
 
     @NonNull
