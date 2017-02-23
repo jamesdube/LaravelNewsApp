@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.jamesdube.laravelnewsapp.models.Post;
@@ -13,6 +14,7 @@ import com.jamesdube.laravelnewsapp.util.Themes;
 
 import java.util.Date;
 
+import io.fabric.sdk.android.Fabric;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmConfiguration;
@@ -32,8 +34,13 @@ public class App extends Application {
         super.onCreate();
         Instance = this;
         Realm();
+        Fabric.with(this, new Crashlytics());
     }
 
+    /**
+     * Get the singleton Instance of the App class
+     * @return App
+     */
     public static App getInstance() {
         if(Instance == null) {
             Log.d(Tag,"app init");

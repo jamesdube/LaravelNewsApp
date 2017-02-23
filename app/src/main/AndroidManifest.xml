@@ -18,6 +18,11 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="426b05a31d05e30d9ca002c27ec8e06c1369f082"
+            />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -33,14 +38,6 @@
             android:label="@string/title_activity_post"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.jamesdube.laravelnewsapp.MainActivity" />
-        </activity>
-        <activity
-            android:name=".SettingsActivity"
-            android:label="@string/title_activity_settings"
-            android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.jamesdube.laravelnewsapp.MainActivity" />
@@ -77,8 +74,6 @@
                 android:name="android.content.SyncAdapter"
                 android:resource="@xml/syncadapter" />
         </service>
-
-        <receiver android:name=".posts.PostsFragment" />
 
         <activity
             android:name=".AboutActivity"

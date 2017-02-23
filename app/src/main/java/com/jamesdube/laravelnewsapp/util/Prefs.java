@@ -11,7 +11,7 @@ import com.jamesdube.laravelnewsapp.App;
 public class Prefs {
 
     public static final int SYNC_INTERVAL_FIFTEEN = 900;
-    public static final int SYNC_INTERVAL_THIRTY = 1800;
+    public static final String SYNC_INTERVAL_THIRTY = "30";
     public static final int SYNC_INTERVAL_SIXTY = 3600;
     public static final String THEME_LIGHT = "light";
     public static final String THEME_DARK = "dark";
@@ -22,9 +22,16 @@ public class Prefs {
     public static int getSyncInterval(){
 
         String syncInterval =  PreferenceManager.getDefaultSharedPreferences(App.getAppContext().getApplicationContext())
-                .getString("sync_frequency", "SYNC_INTERVAL_THIRTY");
+                .getString("sync_frequency", SYNC_INTERVAL_THIRTY);
         Log.d(App.Tag,"sync frequency => " + syncInterval);
-        return (Integer.valueOf(syncInterval) * 60);
+        int interval = 30 * 60;
+        try {
+            interval = (Integer.valueOf(syncInterval) * 60);
+        }
+        catch (NumberFormatException e){
+            e.printStackTrace();
+        }
+        return interval;
     }
 
     public static String getTheme(){
