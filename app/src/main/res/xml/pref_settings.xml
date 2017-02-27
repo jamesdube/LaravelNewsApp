@@ -71,6 +71,9 @@
         <Preference android:title="@string/pref_title_about_laravel_news">
             <intent android:action="android.intent.action.ABOUT_LARAVEL_NEWS" />
         </Preference>
+        <Preference android:title="@string/pref_title_about_developer">
+            <intent android:action="android.intent.action.ABOUT_DEVELOPER" />
+        </Preference>
     </PreferenceCategory>
 
 

@@ -1,4 +1,4 @@
-package com.jamesdube.laravelnewsapp;
+package com.jamesdube.laravelnewsapp.about;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -8,9 +8,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import com.jamesdube.laravelnewsapp.R;
+
 import mehdi.sakout.aboutpage.AboutPage;
 
-public class AboutActivity extends AppCompatActivity {
+public class LaravelNews extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
