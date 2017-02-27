@@ -21,22 +21,18 @@ public class LaravelNews extends AppCompatActivity {
                 .isRTL(false)
                 .setImage(R.mipmap.ic_launcher)
                 .setDescription(getResources().getString(R.string.activity_about_description))
-                //                .addItem(versionElement)
-                //              .addItem(adsElement)
                 .addGroup("Laravel News")
                 .addWebsite("http://laravel-news.com")
                 .addFacebook("laravelnews")
                 .addTwitter("laravelnews")
                 .addYoutube("UC_HmfSCvAl_JaqdwN5YSVsg")
                 .addInstagram("laravelnews")
-                .addGroup("Laravel News App")
-                .addEmail("jamesddube@live.com")
-                .addWebsite("http://jamesdube.com")
-                .addTwitter("jamesddube")
-                .addPlayStore("com.jamesdube.laravelnewsapp")
-                .addGitHub("jamesddube")
-                .addInstagram("jamesddube")
                 .create();
         setContentView(aboutPage);
+
+        ActionBar actionBar = getSupportActionBar();
+        if(actionBar != null){
+            actionBar.setTitle("About");
+        }
     }
 }
