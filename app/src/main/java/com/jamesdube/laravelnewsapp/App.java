@@ -11,6 +11,7 @@ import com.jamesdube.laravelnewsapp.models.Post;
 import com.jamesdube.laravelnewsapp.util.CustomDateSerializer;
 import com.jamesdube.laravelnewsapp.util.PostDeserializer;
 import com.jamesdube.laravelnewsapp.util.Themes;
+import com.kobakei.ratethisapp.RateThisApp;
 
 import java.util.Date;
 
@@ -35,6 +36,17 @@ public class App extends Application {
         Instance = this;
         Realm();
         Fabric.with(this, new Crashlytics());
+        rateThisApp();
+    }
+
+    /**
+     * App rating init
+     */
+    private void rateThisApp() {
+        // Monitor launch times and interval from installation
+        RateThisApp.onStart(this);
+        // If the criteria is satisfied, "Rate this app" dialog will be shown
+        RateThisApp.showRateDialogIfNeeded(this);
     }
 
     /**
