@@ -76,8 +76,7 @@
 
         <activity
             android:name=".about.LaravelNews"
-            android:label="@string/title_activity_about"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:label="@string/title_activity_about">
             <intent-filter>
                 <action android:name="android.intent.action.ABOUT_LARAVEL_NEWS" />
                 <category android:name="android.intent.category.DEFAULT" />
