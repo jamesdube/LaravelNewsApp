@@ -1,5 +1,6 @@
 package com.jamesdube.laravelnewsapp.about;
 
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -25,5 +26,10 @@ public class Developer extends AppCompatActivity {
                 .addGitHub("jamesddube")
                 .create();
         setContentView(aboutPage);
+
+        ActionBar actionBar = getSupportActionBar();
+        if(actionBar != null){
+            actionBar.setTitle("About");
+        }
     }
 }
