@@ -86,6 +86,7 @@
                     android:textSize="18sp" />
 
                 <TextView
+                    android:textColor="?attr/colorAccent"
                     android:id="@+id/pubDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
