@@ -44,9 +44,8 @@ public class App extends Application {
     static void rateThisApp(Context context) {
         // Monitor launch times and interval from installation
         RateThisApp.onStart(context);
-        RateThisApp.showRateDialog(context);
         // If the criteria is satisfied, "Rate this app" dialog will be shown
-        //RateThisApp.showRateDialogIfNeeded(context);
+        RateThisApp.showRateDialogIfNeeded(context);
     }
 
     /**
