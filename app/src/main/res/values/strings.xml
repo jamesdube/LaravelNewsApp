@@ -104,7 +104,7 @@
     <string name="favourite">Favourites</string>
     <string name="title_activity_about">About</string>
     <string name="activity_about_description">Laravel News is the official blog of Laravel. Every day bringing you the latest news, tutorials, and packages for the framework.
-    Laravel News App is in no way associated with laravel news.
+    Laravel News App is a mobile app bringing you the latest posts from Laravel News and is in no way associated with Laravel News.
     </string>
     <string name="activity_about_developer_description">James Dube</string>
     <string name="about">About</string>
