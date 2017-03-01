@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.jamesdube.laravelnewsapp.R;
+import com.jamesdube.laravelnewsapp.util.Themes;
 
 import mehdi.sakout.aboutpage.AboutPage;
 
@@ -14,6 +15,7 @@ public class Developer extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Themes.applyTheme(this);
         super.onCreate(savedInstanceState);
         View aboutPage = new AboutPage(this)
                 .isRTL(false)
