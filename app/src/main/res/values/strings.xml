@@ -108,4 +108,10 @@
     </string>
     <string name="activity_about_developer_description">James Dube</string>
     <string name="about">About</string>
+    <string name="emptyViewTitleArchived">No Archived Posts</string>
+    <string name="emptyViewDescriptionArchived">swipe an article left to archive it.</string>
+    <string name="emptyViewTitleFavourite">No Favourite Posts</string>
+    <string name="emptyViewDescriptionFavourite">click the heart icon to favourite a post</string>
+    <string name="emptyViewTitleDefault">No Posts</string>
+    <string name="emptyViewDescriptionDefault">swipe down to refesh</string>
 </resources>

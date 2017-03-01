@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <attr name="ts" format="reference" />
+    <attr name="navTextSelected" format="reference" />
+    <attr name="navTextBackground" format="reference" />
+    <attr name="navIconSelected" format="reference" />
+    <attr name="navIconDefault" format="reference" />
 </resources>
