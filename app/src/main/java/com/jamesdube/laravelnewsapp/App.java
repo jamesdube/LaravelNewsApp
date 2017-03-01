@@ -36,17 +36,17 @@ public class App extends Application {
         Instance = this;
         Realm();
         Fabric.with(this, new Crashlytics());
-        rateThisApp();
     }
 
     /**
      * App rating init
      */
-    private void rateThisApp() {
+    static void rateThisApp(Context context) {
         // Monitor launch times and interval from installation
-        RateThisApp.onStart(this);
+        RateThisApp.onStart(context);
+        RateThisApp.showRateDialog(context);
         // If the criteria is satisfied, "Rate this app" dialog will be shown
-        RateThisApp.showRateDialogIfNeeded(this);
+        //RateThisApp.showRateDialogIfNeeded(context);
     }
 
     /**
