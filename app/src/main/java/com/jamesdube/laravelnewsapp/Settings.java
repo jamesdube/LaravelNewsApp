@@ -19,6 +19,7 @@ import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.jamesdube.laravelnewsapp.sync.SyncAdapter;
@@ -75,7 +76,9 @@ public class Settings extends AppCompatActivity {
 
 
     }
-    
 
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return super.onOptionsItemSelected(item);
+    }
 }
