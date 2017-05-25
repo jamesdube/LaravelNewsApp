@@ -27,20 +27,6 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <!--Laravel Application Theme-->
-    <style name="AppTheme.Laravel" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary_laravel</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark_laravel</item>
-        <item name="colorAccent">@color/colorAccent_laravel</item>
-        <item name="android:textColorPrimary">@color/textColorPrimary_laravel</item>
-        <item name="android:textColorSecondary">@color/textColorSecondary_laravel</item>
-        <item name="android:textColorPrimaryInverse">@color/textColorPrimaryInverse_laravel</item>
-        <item name="android:textColorSecondaryInverse">@color/textColorSecondaryInverse_laravel</item>
-        <!-- some other theme configurations for actionbar, overflow menu etc. -->
-        <item name="ts">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
-    </style>
-
     <!--Dark Application Theme-->
     <style name="AppTheme.Dark" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
@@ -55,15 +41,6 @@
         <!-- some other theme configurations for actionbar, overflow menu etc. -->
         <item name="ts">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
     </style>
-
-    <style name="AppTheme.Laravel.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
-    <style name="AppTheme.Laravel.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="AppTheme.Laravel.PopupOverlay" parent="ThemeOverlay.AppCompat.Dark" />
 
     <!--cards-->
     <style name="Widget.CardContent" parent="android:Widget">

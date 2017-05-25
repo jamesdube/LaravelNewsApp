@@ -66,5 +66,12 @@
             android:title="@string/pref_title_dark_theme" />
     </PreferenceCategory>
 
+    <PreferenceCategory
+        android:title="About">
+        <Preference android:title="@string/pref_title_about_laravel_news">
+            <intent android:action="android.intent.action.ABOUT_LARAVEL_NEWS" />
+        </Preference>
+    </PreferenceCategory>
+
 
 </PreferenceScreen>
