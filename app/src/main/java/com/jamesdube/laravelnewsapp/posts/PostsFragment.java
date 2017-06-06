@@ -222,8 +222,12 @@ public class PostsFragment extends Fragment {
     }
 
     private void unRegisterReceivers() {
-        getActivity().unregisterReceiver(syncSuccess);
-        getActivity().unregisterReceiver(syncError);
+        try {
+            getActivity().unregisterReceiver(syncSuccess);
+            getActivity().unregisterReceiver(syncError);
+        }catch (IllegalArgumentException e){
+            MainActivity.showSnackBar("Error syncing posts");
+        }
     }
 
 
