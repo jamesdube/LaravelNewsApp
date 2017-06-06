@@ -11,11 +11,13 @@
         <item name="android:textColorPrimaryInverse">@color/textColorPrimaryInverse</item>
         <item name="android:textColorSecondaryInverse">@color/textColorSecondaryInverse</item>
         <!-- some other theme configurations for actionbar, overflow menu etc. -->
-    </style>
+        <!--Nav Selection-->
+        <item name="navTextBackground">@color/colorPrimaryDark</item>
+        <item name="navTextSelected">@color/colorPrimary</item>
 
-    <style name="MyToolbarStyle" parent="ThemeOverlay.AppCompat.ActionBar">
-        <item name="colorControlNormal">#f9a033</item>
-        <item name="android:textColorPrimary">#51ec0e</item>
+        <!--Nav Selection Icon-->
+        <item name="navIconSelected">@color/colorPrimary</item>
+        <item name="navIconDefault">@color/colorPrimaryDark</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -38,8 +40,25 @@
         <item name="android:textColorPrimaryInverse">@color/textColorPrimaryInverse_dark</item>
         <item name="android:textColorSecondaryInverse">@color/textColorSecondaryInverse_dark</item>
         <item name="android:windowBackground">@color/colorPrimaryDark_dark</item>
+        <!-- Theme for all Alert Dialogs (e.g. from DialogPreference) -->
+        <item name="alertDialogTheme">@style/AppTheme.Dark.Dialog</item>
         <!-- some other theme configurations for actionbar, overflow menu etc. -->
         <item name="ts">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
+
+        <!--Nav Selection Text-->
+        <item name="navTextBackground">@color/textColorPrimary_dark</item>
+        <item name="navTextSelected">@color/textColorSecondary_dark</item>
+
+        <!--Nav Selection Icon-->
+        <item name="navIconSelected">@color/textColorSecondary_dark</item>
+        <item name="navIconDefault">@color/textColorSecondary_dark</item>
+    </style>
+
+    <style name="AppTheme.Dark.Dialog" parent="Theme.AppCompat.Dialog.Alert">
+        <!-- To tint the background -->
+        <item name="android:windowBackground">@color/colorPrimary_dark</item>
+        <!-- To tint the buttons -->
+        <item name="colorAccent">@color/colorAccent_dark</item>
     </style>
 
     <!--cards-->

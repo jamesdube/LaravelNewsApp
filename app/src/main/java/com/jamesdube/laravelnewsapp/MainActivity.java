@@ -53,6 +53,8 @@ public class MainActivity extends AppCompatActivity
         //create account first
         SyncAdapter.initializeSyncAdapter(this);
 
+        App.rateThisApp(this);
+
         Log.d(App.Tag,"interval => "+String.valueOf(Prefs.getSyncInterval()) + " sec");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

@@ -23,9 +23,15 @@
             android:orientation="vertical"
             >
 
+            <ImageView
+                android:layout_gravity="center_horizontal"
+                android:id="@+id/emptyViewImage"
+                android:layout_width="80dp"
+                android:layout_height="80dp" />
+
             <TextView
                 android:textColor="?attr/android:textColorPrimary"
-                android:id="@+id/text_title"
+                android:id="@+id/emptyViewTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -39,7 +45,7 @@
 
             <TextView
                 android:textColor="?attr/android:textColorPrimary"
-                android:id="@+id/text_content"
+                android:id="@+id/emptyViewDescription"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"

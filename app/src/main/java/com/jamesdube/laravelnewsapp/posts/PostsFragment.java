@@ -80,6 +80,8 @@ public class PostsFragment extends Fragment {
         recyclerView = (RecyclerViewEmptySupport) getActivity().findViewById(R.id.postsRecyclerview);
         swipeRefreshLayout = (SwipeRefreshLayout) getActivity().findViewById(R.id.postsSwipeLayout);
         emptyView = (LinearLayout) getActivity().findViewById(R.id.postsEmptyView);
+        emptyView = (LinearLayout) getActivity().findViewById(R.id.postsEmptyView);
+        emptyView = (LinearLayout) getActivity().findViewById(R.id.postsEmptyView);
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -94,7 +96,7 @@ public class PostsFragment extends Fragment {
 
             @Override
             public void onReceive(Context context, Intent intent) {
-                Log.d("xxxx ", "Sync finished, should refresh nao!!");
+                Log.d("xxxx ", "Sync finished, should refresh now");
                 swipeRefreshLayout.setRefreshing(false);
                 //repopulate
                 adapter.notifyDataSetChanged();
@@ -108,7 +110,7 @@ public class PostsFragment extends Fragment {
 
             @Override
             public void onReceive(Context context, Intent intent) {
-                Log.d("xxxx ", "Sync finished with error");
+                Log.d(App.Tag, "Sync finished with error");
                 swipeRefreshLayout.setRefreshing(false);
                 //repopulate
                 adapter.notifyDataSetChanged();

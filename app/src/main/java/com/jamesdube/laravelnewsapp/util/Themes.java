@@ -32,4 +32,20 @@ public class Themes {
             }
         }
     }
+
+    public static int getColorAccent() {
+        String theme = PreferenceManager.getDefaultSharedPreferences(App.getAppContext().getApplicationContext())
+                .getString("pref_theme", "light");
+        switch (theme){
+            case "light":{
+                return R.color.colorAccent;
+            }
+            case "dark":{
+                return R.color.colorAccent_dark;
+            }
+            default:{
+                return R.color.colorAccent;
+            }
+        }
+    }
 }

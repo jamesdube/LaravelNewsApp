@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.jamesdube.laravelnewsapp">
 
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
@@ -18,11 +18,10 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="426b05a31d05e30d9ca002c27ec8e06c1369f082"
-            />
+            android:value="426b05a31d05e30d9ca002c27ec8e06c1369f082" />
+
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -76,9 +75,8 @@
         </service>
 
         <activity
-            android:name=".AboutActivity"
-            android:label="@string/title_activity_about"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:name=".about.LaravelNews"
+            android:label="@string/title_activity_about">
             <intent-filter>
                 <action android:name="android.intent.action.ABOUT_LARAVEL_NEWS" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -91,6 +89,12 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.jamesdube.laravelnewsapp.MainActivity" />
+        </activity>
+        <activity android:name=".about.Developer">
+            <intent-filter>
+                <action android:name="android.intent.action.ABOUT_DEVELOPER" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
     </application>
 
