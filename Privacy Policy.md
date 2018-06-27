@@ -1,7 +1,7 @@
 # Privacy Policy
 
 ### Personal identification information
-[Laravel News App](https://play.google.com/store/apps/details?id=com.jamesdube.laravelnewsapp) does not collect or share personal information. That is our privacy policy in a nutshell. This is includes your name, email address, age or any details that can be used to identify you.
+[Laravel News App](https://play.google.com/store/apps/details?id=com.jamesdube.laravelnewsapp) does not collect or share personal information. That is our privacy policy in a nutshell, this includes your name, email address, age or any details that can be used to identify you.
 
 
 ### Fabric Crashlytics
